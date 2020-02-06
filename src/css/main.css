@@ -1,0 +1,389 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  width: calc(100vh - 50px);
+  height: calc(100vh - 50px);
+  background: #072850;
+  overflow: hidden;
+}
+
+:root {
+  --accent: #072850;
+  --gray: #999999;
+}
+
+.tools {
+  display: flex;
+  position: fixed;
+  z-index: 1500;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.tool {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  background: white;
+  border-radius: 5px;
+  width: 38px;
+  height: 38px;
+  margin: 5px;
+  cursor: pointer;
+  color: #072850;
+  opacity: .75;
+  transition: all .3s ease;
+}
+
+.tool img {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.tool.active,
+.tool:hover {
+  opacity: 1;
+}
+
+.tool.disable:hover {
+  opacity: .75;
+  cursor: default;
+}
+
+.form-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.form-group input.setting {
+  color: #072850;
+  height: 35px;
+  transition: all .3s ease;
+  box-shadow: 0 0 75px 0 rgb(41, 46, 56);
+}
+
+
+.form-group .setting {
+  border: none;
+  background: white;
+  border-radius: 5px;
+  height: 38px;
+  margin: 5px;
+  padding: 0 15px;
+}
+
+.form-group button.setting {
+  cursor: pointer;
+  color: var(--accent);
+  transition: all .3s ease;
+}
+
+.form-group button.setting span {
+  opacity: .45;
+  transition: all .3s ease;
+}
+
+.form-group input.setting::placeholder {
+  color: var(--accent);
+  opacity: .45;
+  transition: all .3s ease;
+}
+
+.form-group input.setting:hover::placeholder {
+  opacity: 1;
+}
+
+.form-group input.setting::placeholder:focus {
+  opacity: 0;
+}
+
+.form-group input::-webkit-outer-spin-button,
+.form-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-group input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.form-group button.setting:hover span {
+  opacity: 1;
+}
+
+#line-tool img {
+  transform: rotate(-45deg);
+}
+
+#container {
+  margin: 0;
+  padding: 0;
+}
+
+.layers {
+  position: fixed;
+  z-index: 1555;
+  right: 0;
+  bottom: 0;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  width: 256px;
+  height: 256px;
+  background: white;
+  border-radius: 5px;
+  overflow-y: scroll;
+  box-shadow: 0 0 75px 0 rgb(41, 46, 56);
+}
+
+.layers::-webkit-scrollbar {
+  width: 2px;
+  border-radius: 5px;
+}
+ 
+.layers::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+ 
+.layers::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.layers .form-group {
+  height: 24px;
+}
+
+.layers .list .item {
+  position: relative;
+  padding: 10px;
+  margin: 10px;
+  background: #f3f3f3;
+  border-radius: 5px;
+  height: 16px;
+  opacity: .75;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.layers .list .item.active,
+.layers .list .item:hover {
+  opacity: 1;
+}
+
+.layers .list .item h3 {
+  font-size: 16px;
+  color: var(--accent);
+  margin: 0;
+  padding: 0;
+}
+
+.layers .list .item .form-group {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.layers .list .item .action {
+  position: relative;
+  top: -5px;
+  border: none;
+  outline: none;
+  background: none;
+  width: 16px;
+  height: 16px;
+  opacity: .75;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.layers .list .item .action:hover {
+  opacity: 1;
+}
+
+.layers .list .item .action img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.layers .list .item.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.layers .list .item.empty .form-group {
+  width: 100%;
+}
+
+.layers .list .item.empty .form-group .action {
+  left: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.layer {
+  border: 1px solid transparent;
+}
+
+.layer.active {
+  border: 1px solid #07285066;
+}
+
+.message {
+  position: absolute;
+  z-index: 1255;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+}
+
+.message.hide {
+  display: none;
+}
+
+.message p {
+  background: white;
+  border-radius: 5px;
+  padding: 25px;
+  cursor: default;
+  box-shadow: 0 0 75px 0 rgb(41, 46, 56);
+}
+
+.message p span {
+  color: var(--accent);
+  opacity: .45;
+  font-size: 14px;
+}
+
+.info {
+  display: flex;
+  position: absolute;
+  z-index: 1255;
+  left: 0;
+  bottom: 0;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  background: white;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+  color: #072850;
+  opacity: .75;
+  transition: all .3s ease;
+}
+
+.btn-indicator,
+.btn:hover {
+  opacity: 1;
+}
+
+.btn img {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.btn-accent {
+  width: 38px;
+  height: 38px;
+}
+
+.btn-indicator {
+  width: min-content;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+
+.btn-indicator img {
+  margin-right: 10px;
+}
+
+.btn-indicator span {
+  opacity: .45;
+}
+
+.logo {
+  display: flex;
+  position: absolute;
+  z-index: 1540;
+  top: 0;
+  left: 0;
+  margin: 25px 0 0 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.logo .image {
+  position: relative;
+  z-index: 1542;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 5px;
+  width: 64px;
+  height: 64px;
+}
+
+.logo .image img {
+  width: 32px;
+  height: 32px;
+  object-fit: content;
+}
+
+.logo .title {
+  position: relative;
+  z-index: 1541;
+  top: 6px;
+  background: white;
+  border-radius: 0 5px 5px 0;
+  padding: 0 75px 0 15px;
+  height: 35px;
+  box-shadow: 0 0 75px 0 rgb(41, 46, 56);
+}
+
+.logo .title h1 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  line-height: 1.35;
+  opacity: .45;
+}
+
+.funcs {
+  position: absolute;
+  z-index: 1541;
+  top: 0;
+  right: 0;
+  margin: 15px 15px 0 0;
+}
+
+#load-blueprint {
+  transform: rotate(180deg);
+}
