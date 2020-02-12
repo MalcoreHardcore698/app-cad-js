@@ -1,0 +1,40 @@
+.constructor-informations {
+  position: absolute;
+  z-index: 1255;
+  left: 0;
+  bottom: 0;
+  margin-left: 20px;
+  margin-bottom: 20px;
+}
+
+.constructor-informations .wrap-notifications {
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  margin-bottom: 5px;
+}
+
+.constructor-informations .wrap-notifications .notify-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.constructor-informations .wrap-notifications .notify-list .notify-item {
+  list-style: none;
+  padding: 10px 15px;
+  background: white;
+  border-radius: 5px;
+  margin: 5px 0;
+  cursor: pointer;
+  opacity: 1;
+}
+
+.constructor-informations .wrap-notifications .notify-list .notify-item span {
+  font-size: 14px;
+  color: var(--accent);
+  opacity: .45;
+}
+
+.constructor-informations .wrap-buttons {
+  display: flex;
+}

@@ -1,0 +1,133 @@
+.constructor-layers {
+  position: fixed;
+  z-index: 1555;
+  right: 0;
+  bottom: 0;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  width: 256px;
+  height: 256px;
+  background: white;
+  border-radius: 5px;
+  overflow-y: scroll;
+  box-shadow: 0 0 75px 0 rgba(41, 46, 56, .25);
+}
+
+.constructor-layers::-webkit-scrollbar {
+  width: 2px;
+  border-radius: 5px;
+}
+ 
+.constructor-layers::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+ 
+.constructor-layers::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+}
+
+.constructor-layers .form-group {
+  height: 24px;
+}
+
+.constructor-layers .list .item {
+  position: relative;
+  padding: 10px;
+  margin: 10px;
+  background: #f3f3f3;
+  border-radius: 5px;
+  height: 16px;
+  opacity: .4;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.constructor-layers .list .item.empty {
+  opacity: .75;
+}
+
+.constructor-layers .list .item.active,
+.constructor-layers .list .item:hover {
+  opacity: 1;
+}
+
+.constructor-layers .list .item h3 {
+  font-size: 16px;
+  color: var(--accent);
+  margin: 0;
+  font-weight: 400;
+  padding: 10px 0;
+  margin-top: -10px;
+}
+
+.constructor-layers .list .item input.active {
+  color: #333333;
+}
+
+.constructor-layers .list .item .form-group {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.constructor-layers .list .item .action {
+  position: relative;
+  top: -5px;
+  border: none;
+  outline: none;
+  background: none;
+  width: 16px;
+  height: 16px;
+  opacity: .75;
+  margin: 0 5px;
+  cursor: pointer;
+  transition: all .3s ease;
+}
+
+.constructor-layers .list .item .action:hover {
+  opacity: 1;
+}
+
+.constructor-layers .list .item .action img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.constructor-layers .list .item.empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.constructor-layers .list .item.empty .form-group {
+  width: 100%;
+}
+
+.constructor-layers .list .item.empty .form-group .action {
+  left: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.constructor-layers .layer.active {
+  opacity: 1;
+}
+
+.constructor-layers .layer .input-layer {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  background: none;
+  height: 100%;
+  width: calc(100% - 20px);
+  font-size: 16px;
+  color: var(--accent);
+  padding: 0 10px;
+  line-height: 0;
+}

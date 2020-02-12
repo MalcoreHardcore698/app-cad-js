@@ -1,0 +1,174 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  width: calc(100vh - 50px);
+  height: calc(100vh - 50px);
+  background: #153f86;
+  overflow: hidden;
+}
+
+#container,
+ul, ul li {
+  margin: 0;
+  padding: 0;
+}
+
+#load-blueprint {
+  transform: rotate(180deg);
+}
+
+#line-tool img {
+  transform: rotate(-45deg);
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  outline: none;
+  background: white;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+  color: #072850;
+  opacity: .75;
+  transition: all .3s ease;
+}
+
+.btn-indicator,
+.btn:hover {
+  opacity: 1;
+}
+
+.btn img {
+  position: relative;
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.btn-accent {
+  width: 38px;
+  height: 38px;
+}
+
+.btn-indicator {
+  width: min-content;
+  padding: 0 15px;
+  white-space: nowrap;
+}
+
+.btn-indicator img {
+  margin-right: 10px;
+}
+
+.btn-indicator span {
+  opacity: .45;
+}
+
+.form-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+}
+
+.form-group input.setting {
+  color: #072850;
+  height: 35px;
+  transition: all .3s ease;
+  box-shadow: 0 0 75px 0 rgba(41, 46, 56, .25);
+}
+
+
+.form-group .setting {
+  border: none;
+  background: white;
+  border-radius: 5px;
+  height: 38px;
+  margin: 5px;
+  padding: 0 15px;
+}
+
+.form-group button.setting {
+  cursor: pointer;
+  color: var(--accent);
+  transition: all .3s ease;
+}
+
+.form-group button.setting span {
+  opacity: .45;
+  transition: all .3s ease;
+}
+
+.form-group input.setting::placeholder {
+  color: var(--accent);
+  opacity: .45;
+  transition: all .3s ease;
+}
+
+.form-group input.setting:hover::placeholder {
+  opacity: 1;
+}
+
+.form-group input.setting::placeholder:focus {
+  opacity: 0;
+}
+
+.form-group input::-webkit-outer-spin-button,
+.form-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-group input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.form-group button.setting:hover span {
+  opacity: 1;
+}
+
+.hide {
+  display: none;
+  opacity: 0;
+}
+
+.show {
+  display: flex;
+  opacity: 1;
+}
+
+#shape-context {
+  display: none;
+  position: absolute;
+  z-index: 3200;
+  width: 180px;
+  background-color: white;
+  box-shadow: 0 0 75px 0 rgba(41, 46, 56, .15);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+#shape-context button {
+  width: 100%;
+  background-color: white;
+  border: none;
+  margin: 0;
+  padding: 8px 15px;
+  text-align: left;
+  outline: none;
+}
+
+#shape-context button span {
+  color: var(--accent);
+  opacity: .45;
+  transition: all .3s ease;
+}
+
+#shape-context button:hover span {
+  opacity: 1;
+}
