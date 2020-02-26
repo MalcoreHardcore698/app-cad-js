@@ -1,0 +1,47 @@
+.constructor-logo {
+  display: flex;
+  position: absolute;
+  z-index: 1540;
+  top: 0;
+  left: 0;
+  margin: 25px 0 0 25px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.constructor-logo .image {
+  position: relative;
+  z-index: 1542;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  border-radius: 5px;
+  width: 64px;
+  height: 64px;
+}
+
+.constructor-logo .image img {
+  width: 32px;
+  height: 32px;
+  object-fit: content;
+}
+
+.constructor-logo .title {
+  position: relative;
+  z-index: 1541;
+  top: 6px;
+  background: white;
+  border-radius: 0 5px 5px 0;
+  padding: 0 75px 0 15px;
+  height: 35px;
+  box-shadow: 0 0 75px 0 rgba(41, 46, 56, .25);
+}
+
+.constructor-logo .title h1 {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--accent);
+  line-height: 1.35;
+  opacity: .45;
+}
