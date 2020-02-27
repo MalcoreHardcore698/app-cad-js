@@ -1,62 +1,36 @@
-const find = () => document.querySelector
-const create = () => document.createElement
 const [width, height] = [window.innerWidth, window.innerHeight]
 
-class Tool {
+class CE_History {
+  constructor() {
+    this.history = 0
+  }
 
+  increase() { this.history++ }
+  decrease() { this.history++ }
+  
+  get value() { return this.history }
 }
 
-class Application {
-  constructor(options) {
-    this.container = options.container
-    
-    this.ct = document.querySelector('#constructor')
-    this.sc = options.scale
-
-    this.createEditor = this.createEditor.bind(this)
-
-    this.fethedData()
-    this.createEditor()
-    this.listenEvents()
+class CE_Color {
+  constructor(colors) {
+    this.colors = colors
   }
 
-  fethedData() {
-    // Data fething...
+  set add(color) {
+    this.colors.push(color)
   }
 
-  createEditor() {
-    this.insertHTML()
-
-    this.sg = new Konva.Stage({
-      container: 'container',
-      width: width,
-      height: height,
-      draggable: true
-    })
-  
-    this.ml = new Konva.Layer()
-    this.dl = new Konva.Layer()
-
-    this.sg.add(this.ml)
-    this.sg.add(this.dl)
-  
-    this.drawGridEditor(this.sc, this.ml)
-    this.fitEditor(this.sg)
+  get random() {
+    return this.colors[Math.floor(Math.random() * Math.floor(this.colors.length))]
   }
+}
 
-  insertHTML() {
-    const insert = ({ container, id = null, name = null, html = null }) => {
-      const div = document.createElement('div')
-      if (id) div.id = id
-      if (name) div.className = name
-      if (html) div.innerHTML = html
-      container.appendChild(div)
-    }
-
+class CE_HTML {
+  constructor() {
     const wrapper = document.querySelector(`#constructor`)
 
-    // [MODALS / POPUPS]
-    insert({
+    // [INSERT MODALS / POPUP]
+    this.insert({
       container: wrapper,
       name: 'constructor-modal',
       html: `
@@ -151,13 +125,13 @@ class Application {
       `
     })
 
-    // [LOGOTYPE]
-    insert({
+    // [INSERT LOGOTYPE]
+    this.insert({
       container: wrapper,
       name: 'constructor-logo',
       html: `
         <div class="image">
-          <img src="./img/logo.png" />
+          <img src="img/logo.png" />
         </div>
         
         <div class="title">
@@ -166,8 +140,8 @@ class Application {
       `
     })
 
-    // [TOOLS]
-    insert({
+    // [INSERT TOOLS]
+    this.insert({
       container: wrapper,
       name: 'constructor-tools',
       html: `
@@ -185,36 +159,36 @@ class Application {
 
         <div class="form-group">
           <button id="move-tool" class="tool disable">
-            <img src="./img/move.svg" />
+            <img src="img/move.svg" />
           </button>
           <button id="line-tool" class="tool disable">
-            <img src="./img/line.svg" />
+            <img src="img/line.svg" />
           </button>
           <button id="rect-tool" class="tool disable">
-            <img src="./img/rect.svg" />
+            <img src="img/rect.svg" />
           </button>
         </div>
       `
     })
 
-    // [FUNCTIONS]
-    insert({
+    // [INSERT FUNCTIONS]
+    this.insert({
       container: wrapper,
       name: 'constructor-funcs',
       html: `
         <div class="form-group">
           <button id="load-blueprint" class="btn btn-accent">
-            <img src="./img/load.svg" />
+            <img src="img/load.svg" />
           </button>
           <button id="save-blueprint" class="btn btn-accent">
-            <img src="./img/save.svg" />
+            <img src="img/save.svg" />
           </button>
         </div>
       `
     })
 
-    // [LAYERS]
-    insert({
+    // [INSERT LAYERS]
+    this.insert({
       container: wrapper,
       name: 'constructor-layers',
       html: `
@@ -222,7 +196,7 @@ class Application {
           <div id="empty" class="item empty">
             <div class="form-group">
               <button id="add-layer" class="tool action">
-                <img src="./img/add.svg" />
+                <img src="img/add.svg" />
               </button>
             </div>
           </div>
@@ -230,8 +204,8 @@ class Application {
       `
     })
 
-    // [MESSAGE OPEN]
-    insert({
+    // [INSERT MESSAGE OPEN]
+    this.insert({
       container: wrapper,
       id: 'constructor-open-message',
       name: 'constructor-message open',
@@ -240,8 +214,8 @@ class Application {
       `
     })
 
-    // [MESSAGE WARNNING]
-    insert({
+    // [INSERT MESSAGE WARNNING]
+    this.insert({
       container: wrapper,
       id: 'constructor-warning-message',
       name: 'constructor-message warning hide',
@@ -250,8 +224,8 @@ class Application {
       `
     })
 
-    // [INFORMATION]
-    insert({
+    // [INSERT INFORMATION]
+    this.insert({
       container: wrapper,
       name: 'constructor-informations',
       html: `
@@ -263,7 +237,7 @@ class Application {
 
         <div class="wrap-buttons">
           <button id="info-button" class="btn btn-accent">
-            <img src="./img/info.svg" />
+            <img src="img/info.svg" />
           </button>
 
           <button class="btn btn-indicator">
@@ -273,15 +247,14 @@ class Application {
       `
     })
 
-    // [CONTEXTMENU]
-    insert({
+    // [INSERT CONTEXT]
+    this.insert({
       container: wrapper,
       id: 'shape-context',
       name: 'constructor-context',
       html: `
         <div>
           <button id="aggragator-pin-button"><span>Прикрепить к аггрегату</span></button>
-          <button id="move-button"><span>Переместить</span></button>
           <button id="change-button"><span>Сменить цвет</span></button>
           <button id="delete-button"><span>Удалить</span></button>
           <button id="options-button"><span>Свойства</span></button>
@@ -290,70 +263,348 @@ class Application {
     })
   }
 
-  drawGridEditor(scale, layer) {
-    const drawAxis = (scale, axis, layer, multiply = 1, alpha = .15) => {
-      const side = (axis === "horizontal") ? width : height
-      const rescale = scale * multiply
-      for (let i = 0; i < side; i++) {
+  insert({ container, id = null, name = null, html = null }) {
+    const div = document.createElement('div')
+    if (id) div.id = id
+    if (name) div.className = name
+    if (html) div.innerHTML = html
+    container.appendChild(div)
+  }
+}
+
+class CE_Stage {
+  constructor() {
+    this.stage = {}
+  }
+
+  create() {
+    this.stage = new Konva.Stage({
+      id: 'ce-stage',
+      container: 'container',
+      width: width,
+      height: height,
+      draggable: true,
+      dragBoundFunc: function(pos) {
+        let newX = pos.x
+        let newY = pos.y
+
+        if (newX > 0)  newX = 0;
+        if (newY > 0) newY = 0;
+
+        return { x: newX, y: newY }
+      }
+    })
+  }
+
+  update(layers) {
+    this.stage.destroyChildren()
+    for (let layer of layers) {
+      this.stage.add(layer)
+    }
+    this.stage.batchDraw()
+  }
+
+  listen(event, callback) {
+    this.stage.on(event, callback)
+  }
+
+  get get() {
+    return this.stage
+  }
+}
+
+class CE_Layer {
+  constructor() {
+    this.core = new Map()
+    this.user = new Map()
+    this.current = {}
+  }
+
+  // Methods with __<name>__ is core
+  __find__(key) {
+    // Find exists core layer
+    return this.core.get(key)
+  }
+
+  __add__(name) {
+    // Add new core layer
+    const layer = new Konva.Layer()
+    this.core.set(name, layer)
+  }
+
+  find(key) {
+    // Find exists layer
+    return this.user.get(key)
+  }
+
+  add(name) {
+    // Add new layer
+    const layer = new Konva.Layer()
+    this.user.set(name, layer)
+  }
+
+  set(key) {
+    // Set current layer
+    this.current = this.find(key)
+  }
+
+  get() {
+    // Current layer
+    return this.current
+  }
+}
+
+class CE_Tool {
+  constructor() {
+    this.tools = new Map()
+    this.current = {}
+  }
+
+  find(key) {
+    return this.tools.get(key)
+  }
+
+  add(name) {
+    this.tools.set(name)
+  }
+
+  set(key) {
+    this.current = this.find(key)
+  }
+
+  get() {
+    return this.current
+  }
+}
+
+class CE_Draw {
+  grid(layer, padding) {
+    const drawing = (axis, scale=padding, alpha=.15) => {
+      for (var i = 0; i < ((axis === 'v') ? width : height) / scale; i++) {
         const line = new Konva.Line({
-          points: (axis === "horizontal") ?
-            [0, i * rescale, width, i * rescale] :
-            [i * rescale, 0, i * rescale, height],
+          points: (axis === 'v') ?
+            [Math.round(i * scale) + 0.5, 0, Math.round(i * scale) + 0.5, height] :
+            [0, Math.round(i * scale), width, Math.round(i * scale)],
           stroke: `rgba(255, 255, 255, ${alpha})`,
-          strokeWidth: 2,
-          lineCap: 'round',
-          lineJoin: 'round'
-        });
+          strokeWidth: 1,
+        })
         layer.add(line)
       }
     }
 
-    const drawPoints = (scale, layer) => {
-      for (let i = 0; i < Math.ceil(height / scale + scale); i++) {
-        for (let k = 0; k < (width / scale); k++) {
-          let circle = new Konva.Circle({
-            x: k * scale,
-            y: i * scale,
-            radius: 3,
-            fill: 'rgba(255, 255, 255, .25)',
-            stroke: 'rgba(255, 255, 255, .25)',
-            strokeWidth: 0,
-            name: 'point',
-            id: `point t-${i} n=${k}`
-          });
+    // Drawing primary lines
+    drawing('v')
+    drawing('h')
 
-          layer.add(circle);
-        }
-      }
+    // Drawing secondary lines
+    drawing('v', padding * 5, .25)
+    drawing('h', padding * 5, .25)
+  }
+
+  rect(stage, layer, padding, x, y) {
+    const round = (n) => Math.round(n / padding) * padding
+    const rect = new Konva.Rect({
+      x: round(x),
+      y: round(y),
+      fill: colors.random,
+      stroke: 'white',
+      strokeWidth: 3,
+      draggable: true
+    })
+
+    rect.on('mousedown', e => {
+      const isMiddle = e.evt.button === 1;
+      rect.draggable(!isMiddle);
+    })
+
+    rect.on('dragstart dragmove dragend', (e) => {
+      rect.position({
+        x: Math.round(rect.x() / padding) * padding,
+        y: Math.round(rect.y() / padding) * padding
+      });
+      stage.batchDraw()
+    })
+
+    layer.add(rect)
+    return rect
+  }
+}
+
+const history = new CE_History()
+const colors = new CE_Color([
+  '#446b99', '#444a99', '#6f4499', '#44998b',
+  '#549944', '#919944', '#997744', '#995644',
+  '#994444', '#994467', '#994485', '#6f4499'
+])
+
+const stage = new CE_Stage()
+const layers = new CE_Layer()
+const tools = new CE_Tool()
+const draw = new CE_Draw()
+
+class Application {
+  constructor(options) {
+    this.unpacking(options)
+
+    this.fetching()
+    this.processing()
+    this.listeners()
+  }
+
+  unpacking(options) {
+    this.padding = options.padding
+    new CE_HTML()
+  }
+
+  processing() {
+    // Create stage
+    stage.create()
+
+    // Adding core layers
+    layers.__add__('grid')
+    layers.__add__('main')
+    layers.__add__('draw')
+
+    // Adding layers on stage
+    stage.update(layers.core.values())
+
+    // Drawing grid on grid layer
+    draw.grid(layers.__find__('grid'), this.padding)
+  }
+
+  fetching() {
+    // Fetching data...
+  }
+
+  listeners() {
+    let x, y, rect
+    let mousedown = false
+
+    let currentShape
+    const context = document.querySelector('#shape-context')
+    const aggragatorPinButton = document.querySelector('#aggragator-pin-button')
+    const changeButton = document.querySelector('#change-button')
+    const deleteButton = document.querySelector('#delete-button')
+    const optionsButton = document.querySelector('#options-button')
+
+    aggragatorPinButton.onclick = () => {
+      console.log('[EVENT] Change color shape')
+
+      context.style.display = 'none'
     }
 
-    // Formation grid
-    drawAxis(scale, "horizontal", layer)
-    drawAxis(scale, "vertical", layer)
-    drawAxis(scale, "horizontal", layer, 5, .25)
-    drawAxis(scale, "vertical", layer, 5, .25)
-  }
+    changeButton.onclick = () => {
+      console.log('[EVENT] Change color shape')
 
-  fitEditor(stage) {
-    const containerWidth = this.ct.offsetWidth
-    const scale = containerWidth / width
+      currentShape.fill(colors.random)
+      currentShape.draw()
 
-    stage.width(width * scale)
-    stage.scale({ x: scale, y: scale })
-    stage.draw()
-  }
+      context.style.display = 'none'
+    }
 
-  listenEvents() {
-    window.addEventListener('resize', () => this.fitEditor(this.sg))
+    deleteButton.onclick = () => {
+      console.log('[EVENT] Destroy shape')
 
-    const scaleBy = 1.15
-    this.sg.on('wheel', e => {
+      layers.__find__('main').children.forEach(child => {
+        if (currentShape === child) child.destroy()
+      })
+      currentShape.destroy()
+      stage.get.batchDraw()
+
+      context.style.display = 'none'
+    }
+
+    optionsButton.onclick = () => {
+      console.log('[EVENT] Open shape options')
+
+      context.style.display = 'none'
+    }
+
+    stage.listen('contextmenu', e => {
       e.evt.preventDefault()
-      const scale = this.sg.scaleX()
 
-      const rescale = e.evt.deltaY > 0 ? scale * scaleBy : scale / scaleBy
-      this.sg.scale({ x: rescale, y: rescale })
-      this.sg.batchDraw()
+      if (e.target === stage.get) {
+        return
+      }
+
+      currentShape = e.target
+
+      context.style.display = 'initial'
+
+      const containerRect = stage.get.container().getBoundingClientRect()
+      context.style.top = containerRect.top + stage.get.getPointerPosition().y - 10 + 'px'
+      context.style.left = containerRect.left + stage.get.getPointerPosition().x - 15 + 'px'
+    })
+
+    stage.listen('mousemove', e => {
+      const pos = stage.get.getPointerPosition()
+      if (e.evt.button === 0) {
+        if (mousedown) {
+          layers.__find__('draw').clear()
+          const currentX = pos.x
+          const currentY = pos.y
+          rect.x(x)
+          rect.y(y)
+
+          rect.width(Math.round((currentX - x) / this.padding) * this.padding)
+          rect.height(Math.round((currentY - y) / this.padding) * this.padding)
+
+          rect.draw()
+        }
+      }
+    })
+
+    stage.listen('mouseup', e => {
+      if (e.evt.button === 0) {
+        layers.__find__('draw').clear()
+        mousedown = false
+
+        if ((rect.x() !== 0) && (rect.y() !== 0)) {
+          layers.__find__('main').add(rect)
+          stage.get.batchDraw()
+        }
+      }
+    })
+
+    stage.listen('mousedown', e => {
+      const isLeft = e.evt.button === 0;
+      stage.get.draggable(!isLeft);
+
+      if (isLeft) {
+        if (!e.target.__proto__.className) {
+          mousedown = true
+          x = Math.round(stage.get.getPointerPosition().x / this.padding) * this.padding
+          y = Math.round(stage.get.getPointerPosition().y / this.padding) * this.padding
+  
+          rect = draw.rect(stage.get, layers.__find__('draw'), this.padding, x, y)
+          //console.log(rect)
+        }
+      }
+    })
+
+    stage.listen('wheel', e => {
+      e.evt.preventDefault()
+      const scaleBy = 1.05;
+      const scale = stage.get.scaleX()
+      const mousePointTo = {
+          x: stage.get.getPointerPosition().x / scale - stage.get.x() / scale,
+          y: stage.get.getPointerPosition().y / scale - stage.get.y() / scale
+      }
+
+      const rescale = e.evt.deltaY > 0 ? scale / scaleBy : scale * scaleBy
+      stage.get.scale({ x: rescale, y: rescale })
+
+      const position = {
+          x: -(mousePointTo.x - stage.get.getPointerPosition().x / rescale) * rescale,
+          y: -(mousePointTo.y - stage.get.getPointerPosition().y / rescale) * rescale
+      }
+
+      stage.get.position(position)
+      stage.get.batchDraw()
+    })
+
+    stage.listen('click', () => {
+      context.style.display = 'none'
     })
   }
 }
