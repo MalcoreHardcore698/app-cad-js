@@ -1,32 +1,14 @@
+// Setting base resolution widget relative window browser
 const [width, height] = [window.innerWidth, window.innerHeight]
 
-class CE_History {
-  constructor() {
-    this.history = 0
-  }
-
-  increase() { this.history++ }
-  decrease() { this.history++ }
-  
-  get value() { return this.history }
-}
-
-class CE_Color {
-  constructor(colors) {
-    this.colors = colors
-  }
-
-  set add(color) {
-    this.colors.push(color)
-  }
-
-  get random() {
-    return this.colors[Math.floor(Math.random() * Math.floor(this.colors.length))]
-  }
-}
+/*************************************************/
+/*                                               */
+/* Below Constructor Editor (CE) implementations */
+/*                                               */
+/*************************************************/
 
 class CE_HTML {
-  constructor() {
+  constructor(scale) {
     const wrapper = document.querySelector(`#constructor`)
 
     // [INSERT MODALS / POPUP]
@@ -241,7 +223,7 @@ class CE_HTML {
           </button>
 
           <button class="btn btn-indicator">
-            <span id="scale-indicator">Текущий масштаб: </span>
+            <span id="scale-indicator">Текущий масштаб: ${scale}</span>
           </button>
         </div>
       `
@@ -272,8 +254,1027 @@ class CE_HTML {
   }
 }
 
+class CE_CSS {
+  constructor() {
+    const head = document.querySelector(`head`)
+    const style = document.createElement('style')
+    const css = `
+      :root {
+          --accent: #0070bf;
+          --gray: #999
+      }
+      
+      body {
+          margin: 0;
+          padding: 0;
+          font-family: 'Roboto', sans-serif;
+          font-size: 16px;
+      }
+      
+      #constructor {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+        background: var(--accent);
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+      
+      #container {
+          width: 100%;
+          height: 100%;
+      }
+      
+      .menu {
+          z-index: 1000;
+      }
+      
+      main {
+          margin-bottom: 90px;
+      }
+      
+      footer.page-footer {
+          bottom: -90px;
+      }
+      
+      #container, body, ul, ul li {
+          margin: 0;
+          padding: 0
+      }
+      
+      #load-blueprint {
+          transform: rotate(180deg)
+      }
+      
+      #line-tool img {
+          transform: rotate(-45deg)
+      }
+      
+      .btn {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: none;
+          outline: none;
+          background: #fff;
+          border-radius: 5px;
+          margin: 5px;
+          cursor: pointer;
+          color: #072850;
+          opacity: .75;
+          transition: all .3s ease
+      }
+      
+          .btn-indicator, .btn:hover {
+              opacity: 1
+          }
+      
+          .btn img {
+              position: relative;
+              width: 16px;
+              height: 16px;
+              object-fit: contain
+          }
+      
+      .btn-accent {
+          width: 38px;
+          height: 38px
+      }
+      
+      .btn-indicator {
+          width: min-content;
+          padding: 0 15px;
+          white-space: nowrap
+      }
+      
+          .btn-indicator img {
+              margin-right: 10px
+          }
+      
+          .btn-indicator span {
+              opacity: .45;
+              color: var(--accent);
+              transition: all .3s ease;
+          }
+      
+      .btn-indicator:hover span {
+          opacity: 1;
+      }
+      
+      .form-group {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          margin: 10px
+      }
+      
+          .form-group input.setting {
+              color: #072850;
+              transition: all .3s ease;
+              box-shadow: 0 0 75px 0 rgba(41,46,56,.25)
+          }
+      
+          .form-group .setting {
+              border: none;
+              background: #fff;
+              border-radius: 5px;
+              height: 38px;
+              margin: 5px;
+              padding: 0 15px
+          }
+      
+          .form-group button.setting {
+              cursor: pointer;
+              color: var(--accent);
+              transition: all .3s ease
+          }
+      
+              .form-group button.setting span {
+                  opacity: .45;
+                  transition: all .3s ease
+              }
+      
+          .form-group input.setting::placeholder {
+              color: var(--accent);
+              opacity: .45;
+              transition: all .3s ease
+          }
+      
+          .form-group input.setting:hover::placeholder {
+              opacity: 1
+          }
+      
+          .form-group input.setting::placeholder:focus {
+              opacity: 0
+          }
+      
+          .form-group input::-webkit-inner-spin-button, .form-group input::-webkit-outer-spin-button {
+              -webkit-appearance: none;
+              margin: 0
+          }
+      
+          .form-group input[type=number] {
+              -moz-appearance: textfield
+          }
+      
+          .form-group button.setting:hover span {
+              opacity: 1
+          }
+      
+      .hide {
+          display: none;
+          opacity: 0
+      }
+      
+      .show {
+          display: flex;
+          opacity: 1
+      }
+      
+      #shape-context, #shape-tooltip {
+          display: none;
+          position: absolute;
+          z-index: 800;
+          width: 220px;
+          background-color: #fff;
+          box-shadow: 0 0 75px 0 rgba(41,46,56,.15);
+          border-radius: 5px;
+          overflow: hidden
+      }
+      
+          #shape-context button {
+              width: 100%;
+              background-color: #fff;
+              border: none;
+              margin: 0;
+              padding: 8px 15px;
+              text-align: left;
+              outline: none
+          }
+      
+              #shape-context button span, #shape-tooltip p {
+                  color: var(--accent);
+                  opacity: .45;
+                  transition: all .3s ease
+              }
+      
+                  #shape-context button:hover span, #shape-tooltip p:hover {
+                      opacity: 1
+                  }
+      
+      .constructor-modal {
+          display: none;
+          justify-content: center;
+          align-items: center;
+          position: absolute;
+          z-index: 900;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,.55);
+          opacity: 0
+      }
+      
+          .constructor-modal.active {
+              display: flex;
+              opacity: 1
+          }
+      
+          .constructor-modal .wrapper {
+              display: none;
+              position: relative;
+              z-index: 905;
+              background: #fff;
+              padding: 15px;
+              border-radius: 5px;
+              min-width: 525px
+          }
+      
+              .constructor-modal .wrapper h1 {
+                  margin: 0 0 15px;
+                  padding: 0;
+                  font-size: 20px;
+                  font-weight: 500;
+                  color: var(--accent);
+                  text-align: center
+              }
+      
+              .constructor-modal .wrapper ul {
+                  display: grid;
+                  grid-template-columns: 1fr;
+                  grid-template-rows: auto;
+                  grid-gap: 10px;
+                  margin: 0;
+                  padding: 0
+              }
+      
+                  .constructor-modal .wrapper ul li {
+                      display: flex;
+                      justify-content: space-between;
+                      list-style: none;
+                      padding: 15px 10px;
+                      margin: 0;
+                      background: #f3f3f3;
+                      border-radius: 5px;
+                      width: calc(100% - 20px);
+                  }
+      
+                      .constructor-modal .wrapper ul li label {
+                          color: var(--accent);
+                          width: 100%;
+                          line-height: 0;
+                      }
+      
+                      .constructor-modal .wrapper ul li span {
+                          font-size: 14px;
+                          color: var(--accent);
+                          opacity: 1;
+                          line-height: 0;
+                      }
+      
+          .constructor-modal .background {
+              position: absolute;
+              z-index: 902;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: transparent;
+              cursor: pointer;
+              animation: fadeIn .3s ease
+          }
+      
+          .constructor-modal .wrapper button {
+              margin-top: 10px;
+              padding: 10px;
+              background: #f3f3f3;
+              border: none;
+              outline: none;
+              border-radius: 5px;
+              width: 100%;
+              cursor: pointer
+          }
+      
+              .constructor-modal .wrapper button span {
+                  color: var(--accent);
+                  opacity: .4;
+                  transition: all .3s ease
+              }
+      
+              .constructor-modal .wrapper button:hover span {
+                  opacity: 1
+              }
+      
+      .checkbox-container {
+          display: block;
+          position: relative;
+          cursor: pointer;
+          font-size: 14px;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none
+      }
+      
+          .checkbox-container input {
+              position: absolute;
+              opacity: 0;
+              cursor: pointer;
+              height: 0;
+              width: 0
+          }
+      
+          .checkbox-container .checkbox-checkmark {
+              position: absolute;
+              z-index: 906;
+              top: -15px;
+              right: -60px;
+              height: 30px;
+              width: 30px;
+              background: #f3f3f3;
+              border-radius: 5px;
+              transition: all .3s ease
+          }
+      
+          .checkbox-container:hover input ~ .checkbox-checkmark {
+              background-color: var(--accent);
+              opacity: .25
+          }
+      
+          .checkbox-container input:checked ~ .checkbox-checkmark {
+              background-color: var(--accent);
+              opacity: 1
+          }
+      
+          .checkbox-container .checkbox-checkmark:after {
+              content: "";
+              position: absolute;
+              display: none
+          }
+      
+          .checkbox-container input:checked ~ .checkbox-checkmark:after {
+              display: block
+          }
+      
+          .checkbox-container .checkbox-checkmark:after {
+              top: 10px;
+              left: 10px;
+              width: calc(100% - 20px);
+              height: calc(100% - 20px);
+              border-radius: 3px;
+              background: #fff
+          }
+      
+      .checkbox-empty {
+          text-align: center;
+          font-weight: 300;
+          opacity: .45;
+          margin: 15px 0;
+      }
+      
+      .constructor-modal .wrapper ul li.checkbox-item {
+          width: calc(100% - 70px);
+          padding: 15px 20px 15px 10px;
+      }
+      
+      .constructor-modal .wrapper button {
+          background: var(--accent)
+      }
+      
+          .constructor-modal .wrapper button span {
+              opacity: 1;
+              color: #fff
+          }
+      
+      .constructor-modal .wrapper .options-list .option-item .option-value img {
+          width: 16px;
+          height: 16px;
+          object-fit: contain;
+          position: absolute;
+          right: 25px;
+          opacity: .75;
+          cursor: pointer;
+          transition: all .3s ease
+      }
+      
+          .constructor-modal .wrapper .options-list .option-item .option-value img:hover {
+              opacity: 1
+          }
+      
+      .wrapper.save-content .form-group {
+          margin: 0 0 10px
+      }
+      
+          .wrapper.save-content .form-group .setting {
+              width: 100%;
+              height: 18px;
+              box-shadow: none;
+              padding: 10px;
+              margin: 0;
+              background: #f3f3f3;
+              border-radius: 5px;
+              outline: none
+          }
+      
+      #drop_zone {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          border: 2px dashed var(--accent);
+          border-radius: 10px;
+          height: 256px;
+          color: var(--accent);
+          font-size: 14px;
+          opacity: .4;
+          cursor: pointer;
+          transition: all .3s ease
+      }
+      
+          #drop_zone:hover {
+              opacity: 1
+          }
+      
+          #drop_zone span {
+              background: #153f86;
+              border-radius: 5px;
+              padding: 10px 15px;
+              color: #fff;
+              cursor: default
+          }
+      
+          #drop_zone.dropped {
+              opacity: 1;
+              background: rgba(21,63,134,.17)
+          }
+      
+      .wrapper.resize-content {
+          width: 525px
+      }
+      
+          .wrapper.resize-content h2 {
+              font-size: 14px;
+              font-weight: 400;
+              padding: 0 15px;
+              text-align: center;
+              color: var(--accent)
+          }
+      
+          .wrapper.resize-content .form-group {
+              margin: 0
+          }
+      
+              .wrapper.resize-content .form-group button {
+                  color: #fff;
+                  opacity: 1
+              }
+      
+      .load-select-button {
+          background: var(--accent);
+          color: #fff;
+          margin: 0;
+          padding: 10px;
+          border-radius: 5px;
+          font-size: 14px;
+          cursor: pointer
+      }
+      
+      .load-select-zone {
+          position: relative
+      }
+      
+          .load-select-zone #load-select-list {
+              position: absolute;
+              width: 100%;
+              background: var(--accent);
+              padding: 10px;
+              margin-top: 15px;
+              border-radius: 5px;
+              z-index: 907;
+              box-shadow: 0 0 50px 0 rgba(0,0,0,.45);
+              font-size: 14px
+          }
+      
+              .load-select-zone #load-select-list .load-select-item {
+                  display: flex;
+                  justify-content: space-between;
+                  list-style: none;
+                  padding: 20px 10px;
+                  margin: 0;
+                  background: #f3f3f3;
+                  border-radius: 5px;
+                  width: 100%;
+                  cursor: pointer
+              }
+      
+                  .load-select-zone #load-select-list .load-select-item span {
+                      opacity: .4;
+                      transition: all .3s ease
+                  }
+      
+                  .load-select-zone #load-select-list .load-select-item:hover span {
+                      opacity: 1
+                  }
+      
+      .delimiter {
+          width: 100%;
+          text-align: center;
+          color: var(--gray);
+          text-transform: uppercase;
+          font-size: 14px;
+          margin: 10px 0
+      }
+      
+      .constructor-logo {
+          display: flex;
+          position: absolute;
+          z-index: 540;
+          top: 0;
+          left: 0;
+          margin: 25px 0 0 25px;
+          cursor: pointer;
+          user-select: none
+      }
+      
+          .constructor-logo .image {
+              position: relative;
+              z-index: 542;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              background: #fff;
+              border-radius: 5px;
+              width: 64px;
+              height: 64px
+          }
+      
+              .constructor-logo .image img {
+                  width: 48px;
+                  height: 48px;
+                  object-fit: contain;
+              }
+      
+          .constructor-logo .title {
+              position: relative;
+              z-index: 541;
+              top: 6px;
+              background: #fff;
+              border-radius: 0 5px 5px 0;
+              padding: 0 75px 0 15px;
+              height: 35px;
+              box-shadow: 0 0 75px 0 rgba(41,46,56,.25);
+              display: flex;
+              align-items: center;
+          }
+      
+              .constructor-logo .title h1 {
+                  font-size: 14px;
+                  font-weight: 500;
+                  color: var(--accent);
+                  line-height: 0;
+                  opacity: .45;
+                  padding: 0;
+                  position: relative;
+                  top: 3px;
+              }
+      
+      .constructor-tools {
+          position: absolute;
+          z-index: 500;
+          top: 0;
+          left: 0;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          margin-top: 15px
+      }
+      
+          .constructor-tools .tool {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              border: none;
+              outline: none;
+              background: #fff;
+              border-radius: 5px;
+              width: 38px;
+              height: 38px;
+              margin: 5px;
+              cursor: pointer;
+              color: #072850;
+              opacity: .75;
+              transition: all .3s ease
+          }
+      
+              .constructor-tools .tool img {
+                  position: relative;
+                  width: 16px;
+                  height: 16px;
+                  object-fit: contain
+              }
+      
+              .constructor-tools .tool.active, .constructor-tools .tool:hover {
+                  opacity: 1
+              }
+      
+              .constructor-tools .tool.disable:hover {
+                  opacity: .75;
+                  cursor: default
+              }
+      
+      .constructor-funcs {
+          position: absolute;
+          z-index: 541;
+          top: 0;
+          right: 0;
+          margin: 15px 15px 0 0
+      }
+      
+      .constructor-layers {
+          position: absolute;
+          z-index: 555;
+          right: 0;
+          bottom: 0;
+          margin-right: 25px;
+          margin-bottom: 25px;
+          width: 256px;
+          height: 256px;
+          background: #fff;
+          border-radius: 5px;
+          overflow-y: scroll;
+          box-shadow: 0 0 75px 0 rgba(41,46,56,.25)
+      }
+      
+          .constructor-layers::-webkit-scrollbar {
+              width: 2px;
+              border-radius: 5px
+          }
+      
+          .constructor-layers::-webkit-scrollbar-track {
+              box-shadow: none
+          }
+      
+          .constructor-layers::-webkit-scrollbar-thumb {
+              background-color: #a9a9a9;
+              outline: 1px solid #708090
+          }
+      
+          .constructor-layers .list .item {
+              display: flex;
+              align-items: center;
+              position: relative;
+              padding: 10px;
+              margin: 10px;
+              background: #f3f3f3;
+              border-radius: 5px;
+              opacity: .4;
+              cursor: pointer;
+              transition: all .3s ease
+          }
+      
+              .constructor-layers .list .item.empty {
+                  opacity: .75
+              }
+      
+              .constructor-layers .list .item.active, .constructor-layers .list .item:hover {
+                  opacity: 1
+              }
+      
+              .constructor-layers .list .item h3 {
+                  font-size: 14px;
+                  color: var(--accent);
+                  font-weight: 400;
+                  padding: 5px 0;
+                  margin: -10px 0 0;
+                  position: relative;
+                  top: 5px;
+              }
+      
+              .constructor-layers .list .item input.active {
+                  color: #333
+              }
+      
+              .constructor-layers .list .item .form-group {
+                  position: absolute;
+                  right: 0;
+                  top: 5px;
+              }
+      
+              .constructor-layers .list .item .action {
+                  position: relative;
+                  top: -5px;
+                  border: none;
+                  outline: none;
+                  background: none;
+                  width: 16px;
+                  height: 16px;
+                  opacity: .75;
+                  margin: 0 5px;
+                  cursor: pointer;
+                  transition: all .3s ease
+              }
+      
+                  .constructor-layers .list .item .action:hover {
+                      opacity: 1
+                  }
+      
+                  .constructor-layers .list .item .action img {
+                      width: 16px;
+                      height: 16px;
+                      object-fit: contain
+                  }
+      
+              .constructor-layers .list .item.empty {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  padding: 20px 10px;
+              }
+      
+                  .constructor-layers .list .item.empty .form-group {
+                      width: 100%
+                  }
+      
+                      .constructor-layers .list .item.empty .form-group .action {
+                          left: 10px;
+                          width: 100%;
+                          height: 100%
+                      }
+      
+          .constructor-layers .layer.active {
+              opacity: 1
+          }
+      
+          .constructor-layers .layer .input-layer {
+              display: none;
+              position: relative;
+              top: 0;
+              left: 0;
+              border-radius: 5px;
+              border: none;
+              outline: none;
+              background: none;
+              width: calc(100% - 20px);
+              font-size: 14px;
+              color: var(--accent);
+              padding: 1px 0;
+              line-height: 0
+          }
+      
+      .constructor-message {
+          position: absolute;
+          z-index: 155;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          user-select: none;
+          opacity: 1;
+          top: 0;
+          left: 0;
+          background: rgba(0, 0, 0, .25);
+          transition: all .3s ease;
+      }
+      
+          .constructor-message.warning {
+              top: 100px;
+              align-items: flex-start;
+              animation: slideIn .3s ease
+          }
+      
+          .constructor-message.open p {
+              top: 0;
+              align-items: flex-start;
+              animation: fadeIn .3s ease
+          }
+      
+          .constructor-message.hide {
+              display: none;
+              opacity: 0;
+              animation: fadeOut .3s ease
+          }
+      
+          .constructor-message p {
+              background: #fff;
+              border-radius: 5px;
+              padding: 25px;
+              cursor: default;
+              box-shadow: 0 0 75px 0 rgba(41,46,56,.25)
+          }
+      
+              .constructor-message p span {
+                  color: var(--accent);
+                  opacity: .45;
+                  font-size: 14px
+              }
+      
+      .constructor-informations {
+          position: absolute;
+          z-index: 255;
+          left: 0;
+          bottom: 0;
+          margin-left: 20px;
+          margin-bottom: 20px
+      }
+      
+          .constructor-informations .wrap-notifications {
+              display: flex;
+              flex-direction: column;
+              margin-left: 5px;
+              margin-bottom: 5px
+          }
+      
+              .constructor-informations .wrap-notifications .notify-list {
+                  display: flex;
+                  flex-direction: column
+              }
+      
+                  .constructor-informations .wrap-notifications .notify-list .notify-item {
+                      list-style: none;
+                      padding: 10px 15px;
+                      background: #fff;
+                      border-radius: 5px;
+                      margin: 5px 0;
+                      cursor: pointer;
+                      opacity: 1
+                  }
+      
+                      .constructor-informations .wrap-notifications .notify-list .notify-item span {
+                          font-size: 14px;
+                          color: var(--accent);
+                          opacity: .45
+                      }
+      
+          .constructor-informations .wrap-buttons {
+              display: flex
+          }
+      
+      .shape-tooltip li {
+          display: none;
+      }
+      
+      .disable {
+          opacity: .25;
+          cursor: default !important;
+      }
+      
+      .fadeIn {
+          animation: fadeIn .3s ease
+      }
+      
+      .fadeOut {
+          animation: fadeOut .3s ease
+      }
+      
+      .slideIn {
+          animation: fadeIn .3s ease
+      }
+      
+      .slideOut {
+          animation: fadeOut .3s ease
+      }
+      
+      @keyframes fadeIn {
+          0% {
+              opacity: 0
+          }
+      
+          25% {
+              opacity: .25
+          }
+      
+          50% {
+              opacity: .5
+          }
+      
+          75% {
+              opacity: .75
+          }
+      
+          to {
+              opacity: 1
+          }
+      }
+      
+      @keyframes fadeOut {
+          0% {
+              opacity: 1
+          }
+      
+          25% {
+              opacity: .75
+          }
+      
+          50% {
+              opacity: .5
+          }
+      
+          75% {
+              opacity: .25
+          }
+      
+          to {
+              opacity: 0
+          }
+      }
+      
+      @keyframes slideIn {
+          0% {
+              opacity: 0;
+              top: 0
+          }
+      
+          25% {
+              opacity: .25;
+              top: 25px
+          }
+      
+          50% {
+              opacity: .5;
+              top: 50px
+          }
+      
+          75% {
+              opacity: .75;
+              top: 75px
+          }
+      
+          to {
+              opacity: 1;
+              top: 100px
+          }
+      }
+      
+      @keyframes slideOut {
+          0% {
+              opacity: 1;
+              top: 100px
+          }
+      
+          25% {
+              opacity: .75;
+              top: 75px
+          }
+      
+          50% {
+              opacity: .5;
+              top: 50px
+          }
+      
+          75% {
+              opacity: .25;
+              top: 25px
+          }
+      
+          to {
+              opacity: 0;
+              top: 0
+          }
+      }
+  
+    `
+    style.innerHTML = css
+    head.append(style)
+  }
+}
+
+class CE_History {
+  constructor() {
+    // Access denied, only within class
+    this.history = 0
+  }
+
+  increase() { this.history++ }
+  decrease() { this.history++ }
+  
+  get value() { return this.history }
+}
+
+class CE_Color {
+  constructor(colors) {
+    // Access denied, only within class
+    this.colors = colors
+  }
+
+  set add(color) {
+    this.colors.push(color)
+  }
+
+  get random() {
+    return this.colors[Math.floor(Math.random() * Math.floor(this.colors.length))]
+  }
+}
+
 class CE_Stage {
   constructor() {
+    // Access denied, only within class
     this.stage = {}
   }
 
@@ -315,12 +1316,13 @@ class CE_Stage {
 
 class CE_Layer {
   constructor() {
+    // Access allowed, everywhere
     this.core = new Map()
     this.user = new Map()
     this.current = {}
   }
 
-  // Methods with __<name>__ is core
+  /* Methods with __<name>__ is core */
   __find__(key) {
     // Find exists core layer
     return this.core.get(key)
@@ -339,7 +1341,11 @@ class CE_Layer {
 
   add(name) {
     // Add new layer
-    const layer = new Konva.Layer()
+    const layer = {
+      id: this.user.size,
+      name: name,
+      children: []
+    }
     this.user.set(name, layer)
   }
 
@@ -356,20 +1362,21 @@ class CE_Layer {
 
 class CE_Tool {
   constructor() {
-    this.tools = new Map()
-    this.current = {}
+    // Access denied, only within class
+    this.tools = []
+    this.current = ''
   }
 
-  find(key) {
-    return this.tools.get(key)
+  find(tool) {
+    return this.tools.filter(tl => tl === tool)
   }
 
   add(name) {
-    this.tools.set(name)
+    this.tools.push(name)
   }
 
-  set(key) {
-    this.current = this.find(key)
+  set(tool) {
+    this.current = tool
   }
 
   get() {
@@ -430,21 +1437,105 @@ class CE_Draw {
   }
 }
 
+class CE_Button {
+  listen(event, button, callback) {
+    switch (event) {
+      case 'click':
+        button.onclick = callback
+    }
+  }
+}
+
+class CE_Settings {
+  constructor() {
+    // Access denied, only within class
+    this.settings = new Map()
+  }
+
+  find(key) {
+    // Get value option
+    return this.settings.get(key)
+  }
+
+  add(key, value) {
+    // Add new option
+    this.settings.set(key, value)
+  }
+
+  set(key, value) {
+    // Set value option
+    this.settings.set(key, value)
+  }
+
+  create() {
+    this.add('debug', true)
+    this.add('snap', true)
+    this.add('ui', true)
+  }
+}
+
+/*************************************************/
+/*                                               */
+/*           Initialization instances            */
+/*                                               */
+/*************************************************/
+// Nesseccary for safe history about created lately layers
+// and formation identificators (not action history)
 const history = new CE_History()
+
+// Just color collection with simple methods (add, random, etc.)
 const colors = new CE_Color([
   '#446b99', '#444a99', '#6f4499', '#44998b',
   '#549944', '#919944', '#997744', '#995644',
   '#994444', '#994467', '#994485', '#6f4499'
 ])
 
+// Nesseccary for building canvas
 const stage = new CE_Stage()
 const layers = new CE_Layer()
 const tools = new CE_Tool()
+
+// Nesseccary for rendering objects (line, rect, etc.)
 const draw = new CE_Draw()
+
+// Nesseccary for managment all buttons
+const button = new CE_Button()
+
+// Nesseccary for primary settings (debug mode, snap grid, etc)
+const settings = new CE_Settings()
+
+/*************************************************/
+/*                                               */
+/*                 Define links                  */
+/*                                               */
+/*************************************************/
+// Strctures
+let modal
+let layer
+// Wrappers for Modals / Popup
+let wrapperModal
+let wrapperInfo
+let wrapperSave
+let wrapperLoad
+let wrapperSettings
+let wrapperResize
+// Nodes & Messages
+let nodeTools
+let nodeList
+let nodeIndicator
+let messageWarnning
+let messageNotification
+
+/*************************************************/
+/*                                               */
+/*                  Application                  */
+/*                                               */
+/*************************************************/
 
 class Application {
   constructor(options) {
     this.unpacking(options)
+    this.attaching()
 
     this.fetching()
     this.processing()
@@ -452,12 +1543,161 @@ class Application {
   }
 
   unpacking(options) {
-    this.padding = options.padding
-    new CE_HTML()
+    /* Unpacking options */
+    this.padding = options.scale
+
+    /* Generate HTML & CSS */
+    new CE_HTML(this.padding)
+    new CE_CSS()
+  }
+
+  attaching() {
+    wrapperModal = document.querySelector('.constructor-modal')
+    wrapperInfo = document.querySelector('#info-modal')
+    wrapperSave = document.querySelector('#save-modal')
+    wrapperLoad = document.querySelector('#load-modal')
+    wrapperSettings = document.querySelector('#options-modal')
+    wrapperResize = document.querySelector('#resize-modal')
+    
+    nodeTools = document.querySelectorAll('.tool')
+    nodeList = document.querySelector('#layer-list')
+    nodeIndicator = document.querySelector('#scale-indicator')
+    messageWarnning = document.querySelector('#constructor-warning-message')
+    messageNotification = document.querySelector('#constructor-open-message')
+
+    modal = {
+      open: (wrapper) => {
+        wrapper.style.display = 'block'
+    
+        wrapperModal.classList.toggle('active')
+        wrapperModal.classList.remove('fadeOut')
+        wrapperModal.classList.add('fadeIn')
+      },
+      close: () => {
+        const wrappers = document.querySelectorAll('.wrapper')
+        
+        setTimeout(() => {
+          wrapperModal.classList.toggle('active')
+          wrappers.forEach(child => {
+            child.style.display = 'none'
+          })
+        }, 200)
+    
+        wrapperModal.classList.remove('fadeIn')
+        wrapperModal.classList.add('fadeOut')
+      }
+    }
+
+    layer = {
+      create: () => {
+        if (settings.find('debug'))
+          console.log('[LAYER] Layer has been created')
+
+        // Create layer content
+        const layerDiv = document.createElement('div')
+        layerDiv.className = `item layer layer-${history.value} active`
+        layerDiv.innerHTML = `
+          <h3 id="tl-input-${history.value}" class="title">Новый слой ${history.value}</h3>
+          <input id="el-input-${history.value}" class="input-layer" type="text" placeholder="Новый слой ${history.value}" />
+            
+          <div class="form-group">
+            <button id="el-${history.value}" class="action edit-layer">
+              <img src="./img/edit.svg" />
+            </button>
+            <button id="dl-${history.value}" class="action delete-layer">
+              <img src="./img/delete.svg" />
+            </button>
+          </div>
+        `
+        nodeList.appendChild(layerDiv)
+
+        // Create essence interface
+        const essence = {
+          change: layerDiv.children[0],
+          edit: layerDiv.children[2].children[0],
+          remove: layerDiv.children[2].children[1]
+        }
+
+        // Create and set current layer by default
+        const name = `layer-${history.value}`
+        layers.add(name)
+        layers.set(name)
+        layers.__find__('main').clear()
+        console.log(layers.user)
+
+        // Listen event by change current layer
+        button.listen('click', essence.change, () => {
+          if (settings.find('debug'))
+            console.log('[LAYER] Layer has been change on ' + name)
+
+          layer.clear()
+          layers.__find__('main').clear()
+          layerDiv.classList.add('active')
+          
+          layers.set(name)
+          layers.get().children.forEach(child => layers.__find__('main').add(child))
+
+          layers.__find__('main').draw()
+        })
+
+        // Listen event by edit current layer
+        button.listen('click', essence.edit, () => {
+          layer.edit(name)
+        })
+
+        // Listen event by delete current layer
+        button.listen('click', essence.remove, () => {
+          layer.delete(name)
+        })
+      },
+      edit: (id) => {
+        if (settings.find('debug'))
+          console.log(`[LAYER] Layer ${id} has been edited`)
+      },
+      delete: (id) => {
+        if (settings.find('debug'))
+          console.log(`[LAYER] Layer ${id} has been deleted`)
+        
+        // Delete content 
+        const nodeLayers = document.querySelectorAll('.layer')
+        nodeLayers.forEach(nodeItem => {
+          if (nodeItem.classList[2] === id)
+            nodeList.removeChild(nodeItem)
+        })
+
+        // Delete layer
+        layers.user.delete(id)
+        layers.__find__('main').clear()
+
+        // Make active another layer, if it exists
+        if (nodeList.children.length > 1) {
+          layer.clear()
+          nodeList.children[nodeList.children.length - 1].classList.add('active')
+        }
+
+        // Show message open, if there are no layers 
+        if (nodeList.children.length === 1) {
+          layer.clear()
+          messageNotification.classList.remove('hide')
+          nodeTools.forEach(tool => {
+              tool.classList.remove('active')
+              tool.classList.add('disable')
+          })
+        }
+      },
+      clear: () => {
+        const nodeLayers = document.querySelectorAll('.layer')
+        nodeLayers.forEach(nodeLayer => nodeLayer.classList.remove('active'))
+      }
+    }
+  }
+
+  fetching() {
+    // Fetching data...
   }
 
   processing() {
-    // Create stage
+    settings.create()
     stage.create()
 
     // Adding core layers
@@ -468,42 +1708,180 @@ class Application {
     // Adding layers on stage
     stage.update(layers.core.values())
 
+    // Adding tools
+    tools.add('move-tool')
+    tools.add('line-tool')
+    tools.add('rect-tool')
+
     // Drawing grid on grid layer
     draw.grid(layers.__find__('grid'), this.padding)
   }
 
-  fetching() {
-    // Fetching data...
-  }
-
   listeners() {
-    let x, y, rect
-    let mousedown = false
-
     let currentShape
-    const context = document.querySelector('#shape-context')
-    const aggragatorPinButton = document.querySelector('#aggragator-pin-button')
-    const changeButton = document.querySelector('#change-button')
-    const deleteButton = document.querySelector('#delete-button')
-    const optionsButton = document.querySelector('#options-button')
 
-    aggragatorPinButton.onclick = () => {
-      console.log('[EVENT] Change color shape')
-
-      context.style.display = 'none'
+    const ui = {
+      layer: {
+        add: document.querySelector('#add-layer'),
+      },
+      info: document.querySelector('#info-button'),
+      save: document.querySelector('#save-blueprint'),
+      load: document.querySelector('#load-blueprint'),
+      background: wrapperModal.children[0]
     }
 
-    changeButton.onclick = () => {
-      console.log('[EVENT] Change color shape')
+    const context = {
+      get: document.querySelector('#shape-context'),
+      attach: document.querySelector('#aggragator-pin-button'),
+      change: document.querySelector('#change-button'),
+      delete: document.querySelector('#delete-button'),
+      options: document.querySelector('#options-button')
+    }
+
+    // Each tools
+    nodeTools.forEach(btn => {
+      button.listen('click', btn, () => {
+        if (nodeList.children.length > 1) {
+          // Clear 'active' class from tools
+          nodeTools.forEach(nodeTool => nodeTool.classList.remove('active'))
+          // Add 'active' class current tool
+          btn.classList.add('active')
+
+          // Set new current tool
+          tools.set(btn.id)
+          
+          /* Tool Handler */
+          switch (tools.get()) {
+              case 'move-tool':
+                return handlerMoveTool()
+              case 'line-tool':
+                return handlerLineTool()
+              case 'rect-tool':
+                return handlerRectTool()
+          }
+        }
+      })
+    })
+    
+    const handlerNotDraggableStage = () => {
+      stage.listen('mousedown', e => {
+        const isLeft = e.evt.button === 0
+        stage.get.draggable(!isLeft)
+      })
+    }
+
+    /* Tool Handlers */
+    const handlerMoveTool = () => {
+      if (settings.find('debug'))
+        console.log('[TOOL] Change tool on ' + tools.get())
+      stage.get.off('mousemove mouseup mousedown')
+      handlerNotDraggableStage()
+    }
+
+    const handlerLineTool = () => {
+      if (settings.find('debug'))
+        console.log('[TOOL] Change tool on ' + tools.get())
+      stage.get.off('mousemove mouseup mousedown')
+      handlerNotDraggableStage()
+    }
+
+    const handlerRectTool = () => {
+      if (settings.find('debug'))
+        console.log('[TOOL] Change tool on ' + tools.get())
+
+      let x, y, rect
+      let mousedown = false
+        
+      stage.listen('mousemove', e => {
+        const pos = stage.get.getPointerPosition()
+        if (e.evt.button === 0) {
+          if (mousedown) {
+            layers.__find__('draw').clear()
+            const currentX = pos.x
+            const currentY = pos.y
+            rect.x(x)
+            rect.y(y)
+  
+            rect.width(Math.round((currentX - x) / this.padding) * this.padding)
+            rect.height(Math.round((currentY - y) / this.padding) * this.padding)
+  
+            rect.draw()
+          }
+        }
+      })
+  
+      stage.listen('mouseup', e => {
+        if (e.evt.button === 0) {
+          layers.__find__('draw').clear()
+          mousedown = false
+  
+          if (x || y) {
+            if ((rect.x() !== 0) && (rect.y() !== 0)) {
+              layers.__find__('main').add(rect)
+
+              layers.get().children.push(rect)
+
+              stage.get.batchDraw()
+            }
+          }
+        }
+      })
+  
+      stage.listen('mousedown', e => {
+        const isLeft = e.evt.button === 0
+        stage.get.draggable(!isLeft)
+  
+        if (isLeft) {
+          if (!e.target.__proto__.className) {
+            mousedown = true
+            x = Math.round(stage.get.getPointerPosition().x / this.padding) * this.padding
+            y = Math.round(stage.get.getPointerPosition().y / this.padding) * this.padding
+    
+            rect = draw.rect(stage.get, layers.__find__('draw'), this.padding, x, y)
+          }
+        }
+      })
+    }
+
+    // Button listeners
+    button.listen('click', ui.layer.add, () => {
+      history.increase()
+
+      layer.clear()
+      layer.create()
+
+      // Enable tools
+      nodeTools.forEach(tl => tl.classList.remove('disable'))
+
+      // Hide message
+      if (nodeList.children.length > 1) messageNotification.classList.add('hide')
+    })
+
+    button.listen('click', ui.info, () => modal.open(wrapperInfo))
+    button.listen('click', ui.save, () => modal.open(wrapperSave))
+    button.listen('click', ui.load, () => modal.open(wrapperLoad))
+    button.listen('click', ui.background, () => modal.close())
+
+    button.listen('click', context.attach, () => {
+      if (settings.find('debug'))
+        console.log('[EVENT] Shape has been attached to aggregator')
+
+      context.get.style.display = 'none'
+    })
+
+    button.listen('click', context.change, () => {
+      if (settings.find('debug'))
+        console.log('[EVENT] Shape has been changed color')
 
       currentShape.fill(colors.random)
       currentShape.draw()
 
-      context.style.display = 'none'
-    }
+      context.get.style.display = 'none'
+    })
 
-    deleteButton.onclick = () => {
-      console.log('[EVENT] Destroy shape')
+    button.listen('click', context.delete, () => {
+      if (settings.find('debug'))
+        console.log('[EVENT] Shape has been deleted')
 
       layers.__find__('main').children.forEach(child => {
         if (currentShape === child) child.destroy()
@@ -511,14 +1889,18 @@ class Application {
       currentShape.destroy()
       stage.get.batchDraw()
 
-      context.style.display = 'none'
-    }
+      context.get.style.display = 'none'
+    })
 
-    optionsButton.onclick = () => {
-      console.log('[EVENT] Open shape options')
+    button.listen('click', context.options, () => {
+      if (settings.find('debug'))
+        console.log('[EVENT] Shape has been called options')
 
-      context.style.display = 'none'
-    }
+      context.get.style.display = 'none'
+    })
+
+    // Stage listeners
+    handlerNotDraggableStage()
 
     stage.listen('contextmenu', e => {
       e.evt.preventDefault()
@@ -529,57 +1911,11 @@ class Application {
 
       currentShape = e.target
 
-      context.style.display = 'initial'
+      context.get.style.display = 'initial'
 
       const containerRect = stage.get.container().getBoundingClientRect()
-      context.style.top = containerRect.top + stage.get.getPointerPosition().y - 10 + 'px'
-      context.style.left = containerRect.left + stage.get.getPointerPosition().x - 15 + 'px'
-    })
-
-    stage.listen('mousemove', e => {
-      const pos = stage.get.getPointerPosition()
-      if (e.evt.button === 0) {
-        if (mousedown) {
-          layers.__find__('draw').clear()
-          const currentX = pos.x
-          const currentY = pos.y
-          rect.x(x)
-          rect.y(y)
-
-          rect.width(Math.round((currentX - x) / this.padding) * this.padding)
-          rect.height(Math.round((currentY - y) / this.padding) * this.padding)
-
-          rect.draw()
-        }
-      }
-    })
-
-    stage.listen('mouseup', e => {
-      if (e.evt.button === 0) {
-        layers.__find__('draw').clear()
-        mousedown = false
-
-        if ((rect.x() !== 0) && (rect.y() !== 0)) {
-          layers.__find__('main').add(rect)
-          stage.get.batchDraw()
-        }
-      }
-    })
-
-    stage.listen('mousedown', e => {
-      const isLeft = e.evt.button === 0;
-      stage.get.draggable(!isLeft);
-
-      if (isLeft) {
-        if (!e.target.__proto__.className) {
-          mousedown = true
-          x = Math.round(stage.get.getPointerPosition().x / this.padding) * this.padding
-          y = Math.round(stage.get.getPointerPosition().y / this.padding) * this.padding
-  
-          rect = draw.rect(stage.get, layers.__find__('draw'), this.padding, x, y)
-          //console.log(rect)
-        }
-      }
+      context.get.style.top = containerRect.top + stage.get.getPointerPosition().y - 10 + 'px'
+      context.get.style.left = containerRect.left + stage.get.getPointerPosition().x - 15 + 'px'
     })
 
     stage.listen('wheel', e => {
@@ -604,7 +1940,7 @@ class Application {
     })
 
     stage.listen('click', () => {
-      context.style.display = 'none'
+      context.get.style.display = 'none'
     })
   }
 }
