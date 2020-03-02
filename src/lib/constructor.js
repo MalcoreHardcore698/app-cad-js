@@ -254,997 +254,6 @@ class CE_HTML {
   }
 }
 
-class CE_CSS {
-  constructor() {
-    const head = document.querySelector(`head`)
-    const style = document.createElement('style')
-    const css = `
-      :root {
-          --accent: #0070bf;
-          --gray: #999
-      }
-      
-      body {
-          margin: 0;
-          padding: 0;
-          font-family: 'Roboto', sans-serif;
-          font-size: 16px;
-      }
-      
-      #constructor {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        position: relative;
-        font-family: 'Roboto', sans-serif;
-        font-size: 14px;
-        background: var(--accent);
-        overflow: hidden;
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-      }
-      
-      #container {
-          width: 100%;
-          height: 100%;
-      }
-      
-      .menu {
-          z-index: 1000;
-      }
-      
-      main {
-          margin-bottom: 90px;
-      }
-      
-      footer.page-footer {
-          bottom: -90px;
-      }
-      
-      #container, body, ul, ul li {
-          margin: 0;
-          padding: 0
-      }
-      
-      #load-blueprint {
-          transform: rotate(180deg)
-      }
-      
-      #line-tool img {
-          transform: rotate(-45deg)
-      }
-      
-      .btn {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: none;
-          outline: none;
-          background: #fff;
-          border-radius: 5px;
-          margin: 5px;
-          cursor: pointer;
-          color: #072850;
-          opacity: .75;
-          transition: all .3s ease
-      }
-      
-          .btn-indicator, .btn:hover {
-              opacity: 1
-          }
-      
-          .btn img {
-              position: relative;
-              width: 16px;
-              height: 16px;
-              object-fit: contain
-          }
-      
-      .btn-accent {
-          width: 38px;
-          height: 38px
-      }
-      
-      .btn-indicator {
-          width: min-content;
-          padding: 0 15px;
-          white-space: nowrap
-      }
-      
-          .btn-indicator img {
-              margin-right: 10px
-          }
-      
-          .btn-indicator span {
-              opacity: .45;
-              color: var(--accent);
-              transition: all .3s ease;
-          }
-      
-      .btn-indicator:hover span {
-          opacity: 1;
-      }
-      
-      .form-group {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          margin: 10px
-      }
-      
-          .form-group input.setting {
-              color: #072850;
-              transition: all .3s ease;
-              box-shadow: 0 0 75px 0 rgba(41,46,56,.25)
-          }
-      
-          .form-group .setting {
-              border: none;
-              background: #fff;
-              border-radius: 5px;
-              height: 38px;
-              margin: 5px;
-              padding: 0 15px
-          }
-      
-          .form-group button.setting {
-              cursor: pointer;
-              color: var(--accent);
-              transition: all .3s ease
-          }
-      
-              .form-group button.setting span {
-                  opacity: .45;
-                  transition: all .3s ease
-              }
-      
-          .form-group input.setting::placeholder {
-              color: var(--accent);
-              opacity: .45;
-              transition: all .3s ease
-          }
-      
-          .form-group input.setting:hover::placeholder {
-              opacity: 1
-          }
-      
-          .form-group input.setting::placeholder:focus {
-              opacity: 0
-          }
-      
-          .form-group input::-webkit-inner-spin-button, .form-group input::-webkit-outer-spin-button {
-              -webkit-appearance: none;
-              margin: 0
-          }
-      
-          .form-group input[type=number] {
-              -moz-appearance: textfield
-          }
-      
-          .form-group button.setting:hover span {
-              opacity: 1
-          }
-      
-      .hide {
-          display: none;
-          opacity: 0
-      }
-      
-      .show {
-          display: flex;
-          opacity: 1
-      }
-      
-      #shape-context, #shape-tooltip {
-          display: none;
-          position: absolute;
-          z-index: 800;
-          width: 220px;
-          background-color: #fff;
-          box-shadow: 0 0 75px 0 rgba(41,46,56,.15);
-          border-radius: 5px;
-          overflow: hidden
-      }
-      
-          #shape-context button {
-              width: 100%;
-              background-color: #fff;
-              border: none;
-              margin: 0;
-              padding: 8px 15px;
-              text-align: left;
-              outline: none
-          }
-      
-              #shape-context button span, #shape-tooltip p {
-                  color: var(--accent);
-                  opacity: .45;
-                  transition: all .3s ease
-              }
-      
-                  #shape-context button:hover span, #shape-tooltip p:hover {
-                      opacity: 1
-                  }
-      
-      .constructor-modal {
-          display: none;
-          justify-content: center;
-          align-items: center;
-          position: absolute;
-          z-index: 900;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,.55);
-          opacity: 0
-      }
-      
-          .constructor-modal.active {
-              display: flex;
-              opacity: 1
-          }
-      
-          .constructor-modal .wrapper {
-              display: none;
-              position: relative;
-              z-index: 905;
-              background: #fff;
-              padding: 15px;
-              border-radius: 5px;
-              min-width: 525px
-          }
-      
-              .constructor-modal .wrapper h1 {
-                  margin: 0 0 15px;
-                  padding: 0;
-                  font-size: 20px;
-                  font-weight: 500;
-                  color: var(--accent);
-                  text-align: center
-              }
-      
-              .constructor-modal .wrapper ul {
-                  display: grid;
-                  grid-template-columns: 1fr;
-                  grid-template-rows: auto;
-                  grid-gap: 10px;
-                  margin: 0;
-                  padding: 0
-              }
-      
-                  .constructor-modal .wrapper ul li {
-                      display: flex;
-                      justify-content: space-between;
-                      list-style: none;
-                      padding: 15px 10px;
-                      margin: 0;
-                      background: #f3f3f3;
-                      border-radius: 5px;
-                      width: calc(100% - 20px);
-                  }
-      
-                      .constructor-modal .wrapper ul li label {
-                          color: var(--accent);
-                          width: 100%;
-                          line-height: 0;
-                      }
-      
-                      .constructor-modal .wrapper ul li span {
-                          font-size: 14px;
-                          color: var(--accent);
-                          opacity: 1;
-                          line-height: 0;
-                      }
-      
-          .constructor-modal .background {
-              position: absolute;
-              z-index: 902;
-              top: 0;
-              left: 0;
-              width: 100%;
-              height: 100%;
-              background: transparent;
-              cursor: pointer;
-              animation: fadeIn .3s ease
-          }
-      
-          .constructor-modal .wrapper button {
-              margin-top: 10px;
-              padding: 10px;
-              background: #f3f3f3;
-              border: none;
-              outline: none;
-              border-radius: 5px;
-              width: 100%;
-              cursor: pointer
-          }
-      
-              .constructor-modal .wrapper button span {
-                  color: var(--accent);
-                  opacity: .4;
-                  transition: all .3s ease
-              }
-      
-              .constructor-modal .wrapper button:hover span {
-                  opacity: 1
-              }
-      
-      .checkbox-container {
-          display: block;
-          position: relative;
-          cursor: pointer;
-          font-size: 14px;
-          -webkit-user-select: none;
-          -moz-user-select: none;
-          -ms-user-select: none;
-          user-select: none
-      }
-      
-          .checkbox-container input {
-              position: absolute;
-              opacity: 0;
-              cursor: pointer;
-              height: 0;
-              width: 0
-          }
-      
-          .checkbox-container .checkbox-checkmark {
-              position: absolute;
-              z-index: 906;
-              top: -15px;
-              right: -60px;
-              height: 30px;
-              width: 30px;
-              background: #f3f3f3;
-              border-radius: 5px;
-              transition: all .3s ease
-          }
-      
-          .checkbox-container:hover input ~ .checkbox-checkmark {
-              background-color: var(--accent);
-              opacity: .25
-          }
-      
-          .checkbox-container input:checked ~ .checkbox-checkmark {
-              background-color: var(--accent);
-              opacity: 1
-          }
-      
-          .checkbox-container .checkbox-checkmark:after {
-              content: "";
-              position: absolute;
-              display: none
-          }
-      
-          .checkbox-container input:checked ~ .checkbox-checkmark:after {
-              display: block
-          }
-      
-          .checkbox-container .checkbox-checkmark:after {
-              top: 10px;
-              left: 10px;
-              width: calc(100% - 20px);
-              height: calc(100% - 20px);
-              border-radius: 3px;
-              background: #fff
-          }
-      
-      .checkbox-empty {
-          text-align: center;
-          font-weight: 300;
-          opacity: .45;
-          margin: 15px 0;
-      }
-      
-      .constructor-modal .wrapper ul li.checkbox-item {
-          width: calc(100% - 70px);
-          padding: 15px 20px 15px 10px;
-      }
-      
-      .constructor-modal .wrapper button {
-          background: var(--accent)
-      }
-      
-          .constructor-modal .wrapper button span {
-              opacity: 1;
-              color: #fff
-          }
-      
-      .constructor-modal .wrapper .options-list .option-item .option-value img {
-          width: 16px;
-          height: 16px;
-          object-fit: contain;
-          position: absolute;
-          right: 25px;
-          opacity: .75;
-          cursor: pointer;
-          transition: all .3s ease
-      }
-      
-          .constructor-modal .wrapper .options-list .option-item .option-value img:hover {
-              opacity: 1
-          }
-      
-      .wrapper.save-content .form-group {
-          margin: 0 0 10px
-      }
-      
-          .wrapper.save-content .form-group .setting {
-              width: 100%;
-              height: 18px;
-              box-shadow: none;
-              padding: 10px;
-              margin: 0;
-              background: #f3f3f3;
-              border-radius: 5px;
-              outline: none
-          }
-      
-      #drop_zone {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border: 2px dashed var(--accent);
-          border-radius: 10px;
-          height: 256px;
-          color: var(--accent);
-          font-size: 14px;
-          opacity: .4;
-          cursor: pointer;
-          transition: all .3s ease
-      }
-      
-          #drop_zone:hover {
-              opacity: 1
-          }
-      
-          #drop_zone span {
-              background: #153f86;
-              border-radius: 5px;
-              padding: 10px 15px;
-              color: #fff;
-              cursor: default
-          }
-      
-          #drop_zone.dropped {
-              opacity: 1;
-              background: rgba(21,63,134,.17)
-          }
-      
-      .wrapper.resize-content {
-          width: 525px
-      }
-      
-          .wrapper.resize-content h2 {
-              font-size: 14px;
-              font-weight: 400;
-              padding: 0 15px;
-              text-align: center;
-              color: var(--accent)
-          }
-      
-          .wrapper.resize-content .form-group {
-              margin: 0
-          }
-      
-              .wrapper.resize-content .form-group button {
-                  color: #fff;
-                  opacity: 1
-              }
-      
-      .load-select-button {
-          background: var(--accent);
-          color: #fff;
-          margin: 0;
-          padding: 10px;
-          border-radius: 5px;
-          font-size: 14px;
-          cursor: pointer
-      }
-      
-      .load-select-zone {
-          position: relative
-      }
-      
-          .load-select-zone #load-select-list {
-              position: absolute;
-              width: 100%;
-              background: var(--accent);
-              padding: 10px;
-              margin-top: 15px;
-              border-radius: 5px;
-              z-index: 907;
-              box-shadow: 0 0 50px 0 rgba(0,0,0,.45);
-              font-size: 14px
-          }
-      
-              .load-select-zone #load-select-list .load-select-item {
-                  display: flex;
-                  justify-content: space-between;
-                  list-style: none;
-                  padding: 20px 10px;
-                  margin: 0;
-                  background: #f3f3f3;
-                  border-radius: 5px;
-                  width: 100%;
-                  cursor: pointer
-              }
-      
-                  .load-select-zone #load-select-list .load-select-item span {
-                      opacity: .4;
-                      transition: all .3s ease
-                  }
-      
-                  .load-select-zone #load-select-list .load-select-item:hover span {
-                      opacity: 1
-                  }
-      
-      .delimiter {
-          width: 100%;
-          text-align: center;
-          color: var(--gray);
-          text-transform: uppercase;
-          font-size: 14px;
-          margin: 10px 0
-      }
-      
-      .constructor-logo {
-          display: flex;
-          position: absolute;
-          z-index: 540;
-          top: 0;
-          left: 0;
-          margin: 25px 0 0 25px;
-          cursor: pointer;
-          user-select: none
-      }
-      
-          .constructor-logo .image {
-              position: relative;
-              z-index: 542;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              background: #fff;
-              border-radius: 5px;
-              width: 64px;
-              height: 64px
-          }
-      
-              .constructor-logo .image img {
-                  width: 48px;
-                  height: 48px;
-                  object-fit: contain;
-              }
-      
-          .constructor-logo .title {
-              position: relative;
-              z-index: 541;
-              top: 6px;
-              background: #fff;
-              border-radius: 0 5px 5px 0;
-              padding: 0 75px 0 15px;
-              height: 35px;
-              box-shadow: 0 0 75px 0 rgba(41,46,56,.25);
-              display: flex;
-              align-items: center;
-          }
-      
-              .constructor-logo .title h1 {
-                  font-size: 14px;
-                  font-weight: 500;
-                  color: var(--accent);
-                  line-height: 0;
-                  opacity: .45;
-                  padding: 0;
-                  position: relative;
-                  top: 3px;
-              }
-      
-      .constructor-tools {
-          position: absolute;
-          z-index: 500;
-          top: 0;
-          left: 0;
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          margin-top: 15px
-      }
-      
-          .constructor-tools .tool {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              border: none;
-              outline: none;
-              background: #fff;
-              border-radius: 5px;
-              width: 38px;
-              height: 38px;
-              margin: 5px;
-              cursor: pointer;
-              color: #072850;
-              opacity: .75;
-              transition: all .3s ease
-          }
-      
-              .constructor-tools .tool img {
-                  position: relative;
-                  width: 16px;
-                  height: 16px;
-                  object-fit: contain
-              }
-      
-              .constructor-tools .tool.active, .constructor-tools .tool:hover {
-                  opacity: 1
-              }
-      
-              .constructor-tools .tool.disable:hover {
-                  opacity: .75;
-                  cursor: default
-              }
-      
-      .constructor-funcs {
-          position: absolute;
-          z-index: 541;
-          top: 0;
-          right: 0;
-          margin: 15px 15px 0 0
-      }
-      
-      .constructor-layers {
-          position: absolute;
-          z-index: 555;
-          right: 0;
-          bottom: 0;
-          margin-right: 25px;
-          margin-bottom: 25px;
-          width: 256px;
-          height: 256px;
-          background: #fff;
-          border-radius: 5px;
-          overflow-y: scroll;
-          box-shadow: 0 0 75px 0 rgba(41,46,56,.25)
-      }
-      
-          .constructor-layers::-webkit-scrollbar {
-              width: 2px;
-              border-radius: 5px
-          }
-      
-          .constructor-layers::-webkit-scrollbar-track {
-              box-shadow: none
-          }
-      
-          .constructor-layers::-webkit-scrollbar-thumb {
-              background-color: #a9a9a9;
-              outline: 1px solid #708090
-          }
-      
-          .constructor-layers .list .item {
-              display: flex;
-              align-items: center;
-              position: relative;
-              padding: 10px;
-              margin: 10px;
-              background: #f3f3f3;
-              border-radius: 5px;
-              opacity: .4;
-              cursor: pointer;
-              transition: all .3s ease
-          }
-      
-              .constructor-layers .list .item.empty {
-                  opacity: .75
-              }
-      
-              .constructor-layers .list .item.active, .constructor-layers .list .item:hover {
-                  opacity: 1
-              }
-      
-              .constructor-layers .list .item h3 {
-                  font-size: 14px;
-                  color: var(--accent);
-                  font-weight: 400;
-                  padding: 5px 0;
-                  margin: -10px 0 0;
-                  position: relative;
-                  top: 5px;
-              }
-      
-              .constructor-layers .list .item input.active {
-                  color: #333
-              }
-      
-              .constructor-layers .list .item .form-group {
-                  position: absolute;
-                  right: 0;
-                  top: 5px;
-              }
-      
-              .constructor-layers .list .item .action {
-                  position: relative;
-                  top: -5px;
-                  border: none;
-                  outline: none;
-                  background: none;
-                  width: 16px;
-                  height: 16px;
-                  opacity: .75;
-                  margin: 0 5px;
-                  cursor: pointer;
-                  transition: all .3s ease
-              }
-      
-                  .constructor-layers .list .item .action:hover {
-                      opacity: 1
-                  }
-      
-                  .constructor-layers .list .item .action img {
-                      width: 16px;
-                      height: 16px;
-                      object-fit: contain
-                  }
-      
-              .constructor-layers .list .item.empty {
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  padding: 20px 10px;
-              }
-      
-                  .constructor-layers .list .item.empty .form-group {
-                      width: 100%
-                  }
-      
-                      .constructor-layers .list .item.empty .form-group .action {
-                          left: 10px;
-                          width: 100%;
-                          height: 100%
-                      }
-      
-          .constructor-layers .layer.active {
-              opacity: 1
-          }
-      
-          .constructor-layers .layer .input-layer {
-              display: none;
-              position: relative;
-              top: 0;
-              left: 0;
-              border-radius: 5px;
-              border: none;
-              outline: none;
-              background: none;
-              width: calc(100% - 20px);
-              font-size: 14px;
-              color: var(--accent);
-              padding: 1px 0;
-              line-height: 0
-          }
-      
-      .constructor-message {
-          position: absolute;
-          z-index: 155;
-          width: 100%;
-          height: 100%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          user-select: none;
-          opacity: 1;
-          top: 0;
-          left: 0;
-          background: rgba(0, 0, 0, .25);
-          transition: all .3s ease;
-      }
-      
-          .constructor-message.warning {
-              top: 100px;
-              align-items: flex-start;
-              animation: slideIn .3s ease
-          }
-      
-          .constructor-message.open p {
-              top: 0;
-              align-items: flex-start;
-              animation: fadeIn .3s ease
-          }
-      
-          .constructor-message.hide {
-              display: none;
-              opacity: 0;
-              animation: fadeOut .3s ease
-          }
-      
-          .constructor-message p {
-              background: #fff;
-              border-radius: 5px;
-              padding: 25px;
-              cursor: default;
-              box-shadow: 0 0 75px 0 rgba(41,46,56,.25)
-          }
-      
-              .constructor-message p span {
-                  color: var(--accent);
-                  opacity: .45;
-                  font-size: 14px
-              }
-      
-      .constructor-informations {
-          position: absolute;
-          z-index: 255;
-          left: 0;
-          bottom: 0;
-          margin-left: 20px;
-          margin-bottom: 20px
-      }
-      
-          .constructor-informations .wrap-notifications {
-              display: flex;
-              flex-direction: column;
-              margin-left: 5px;
-              margin-bottom: 5px
-          }
-      
-              .constructor-informations .wrap-notifications .notify-list {
-                  display: flex;
-                  flex-direction: column
-              }
-      
-                  .constructor-informations .wrap-notifications .notify-list .notify-item {
-                      list-style: none;
-                      padding: 10px 15px;
-                      background: #fff;
-                      border-radius: 5px;
-                      margin: 5px 0;
-                      cursor: pointer;
-                      opacity: 1
-                  }
-      
-                      .constructor-informations .wrap-notifications .notify-list .notify-item span {
-                          font-size: 14px;
-                          color: var(--accent);
-                          opacity: .45
-                      }
-      
-          .constructor-informations .wrap-buttons {
-              display: flex
-          }
-      
-      .shape-tooltip li {
-          display: none;
-      }
-      
-      .disable {
-          opacity: .25;
-          cursor: default !important;
-      }
-      
-      .fadeIn {
-          animation: fadeIn .3s ease
-      }
-      
-      .fadeOut {
-          animation: fadeOut .3s ease
-      }
-      
-      .slideIn {
-          animation: fadeIn .3s ease
-      }
-      
-      .slideOut {
-          animation: fadeOut .3s ease
-      }
-      
-      @keyframes fadeIn {
-          0% {
-              opacity: 0
-          }
-      
-          25% {
-              opacity: .25
-          }
-      
-          50% {
-              opacity: .5
-          }
-      
-          75% {
-              opacity: .75
-          }
-      
-          to {
-              opacity: 1
-          }
-      }
-      
-      @keyframes fadeOut {
-          0% {
-              opacity: 1
-          }
-      
-          25% {
-              opacity: .75
-          }
-      
-          50% {
-              opacity: .5
-          }
-      
-          75% {
-              opacity: .25
-          }
-      
-          to {
-              opacity: 0
-          }
-      }
-      
-      @keyframes slideIn {
-          0% {
-              opacity: 0;
-              top: 0
-          }
-      
-          25% {
-              opacity: .25;
-              top: 25px
-          }
-      
-          50% {
-              opacity: .5;
-              top: 50px
-          }
-      
-          75% {
-              opacity: .75;
-              top: 75px
-          }
-      
-          to {
-              opacity: 1;
-              top: 100px
-          }
-      }
-      
-      @keyframes slideOut {
-          0% {
-              opacity: 1;
-              top: 100px
-          }
-      
-          25% {
-              opacity: .75;
-              top: 75px
-          }
-      
-          50% {
-              opacity: .5;
-              top: 50px
-          }
-      
-          75% {
-              opacity: .25;
-              top: 25px
-          }
-      
-          to {
-              opacity: 0;
-              top: 0
-          }
-      }
-  
-    `
-    style.innerHTML = css
-    head.append(style)
-  }
-}
-
 class CE_History {
   constructor() {
     // Access denied, only within class
@@ -1254,6 +263,7 @@ class CE_History {
   increase() { this.history++ }
   decrease() { this.history++ }
   
+  refresh() { this.history = 0 }
   get value() { return this.history }
 }
 
@@ -1339,12 +349,12 @@ class CE_Layer {
     return this.user.get(key)
   }
 
-  add(name) {
+  add(name, children=[]) {
     // Add new layer
     const layer = {
       id: this.user.size,
       name: name,
-      children: []
+      children: children
     }
     this.user.set(name, layer)
   }
@@ -1353,6 +363,16 @@ class CE_Layer {
     // Set current layer
     this.current = this.find(key)
   }
+
+  all() {
+    let formatted = []
+    for (let value of this.user.values()) {
+      formatted.push(value)
+    }
+    return formatted
+  }
+
+  refresh() { this.user = new Map() }
 
   get() {
     // Current layer
@@ -1548,7 +568,7 @@ class Application {
 
     /* Generate HTML & CSS */
     new CE_HTML(this.padding)
-    new CE_CSS()
+    //new CE_CSS()
   }
 
   attaching() {
@@ -1589,7 +609,7 @@ class Application {
     }
 
     layer = {
-      create: () => {
+      create: (title=`Новый слой ${history.value}`, children=[]) => {
         if (settings.find('debug'))
           console.log('[LAYER] Layer has been created')
 
@@ -1597,8 +617,8 @@ class Application {
         const layerDiv = document.createElement('div')
         layerDiv.className = `item layer layer-${history.value} active`
         layerDiv.innerHTML = `
-          <h3 id="tl-input-${history.value}" class="title">Новый слой ${history.value}</h3>
-          <input id="el-input-${history.value}" class="input-layer" type="text" placeholder="Новый слой ${history.value}" />
+          <h3 id="tl-input-${history.value}" class="title">${title}</h3>
+          <input id="el-input-${history.value}" class="input-layer" type="text" placeholder="${title}" />
             
           <div class="form-group">
             <button id="el-${history.value}" class="action edit-layer">
@@ -1620,10 +640,9 @@ class Application {
 
         // Create and set current layer by default
         const name = `layer-${history.value}`
-        layers.add(name)
+        layers.add(name, children)
         layers.set(name)
         layers.__find__('main').clear()
-        console.log(layers.user)
 
         // Listen event by change current layer
         button.listen('click', essence.change, () => {
@@ -1631,12 +650,14 @@ class Application {
             console.log('[LAYER] Layer has been change on ' + name)
 
           layer.clear()
-          layers.__find__('main').clear()
-          layerDiv.classList.add('active')
           
-          layers.set(name)
-          layers.get().children.forEach(child => layers.__find__('main').add(child))
+          layers.__find__('main').clear()
+          stage.get.batchDraw()
 
+          layerDiv.classList.add('active')
+          layers.set(name)
+          
+          layers.get().children.forEach(child => layers.__find__('main').add(child))
           layers.__find__('main').draw()
         })
 
@@ -1724,9 +745,28 @@ class Application {
       layer: {
         add: document.querySelector('#add-layer'),
       },
-      info: document.querySelector('#info-button'),
-      save: document.querySelector('#save-blueprint'),
-      load: document.querySelector('#load-blueprint'),
+      resize: {
+        button: document.querySelector('#size-button'),
+        input: document.querySelector('#size-input'),
+        apply: document.querySelector('#apply-resize'),
+        decline: document.querySelector('#decline-resize')
+      },
+      save: {
+        button: document.querySelector('#save-blueprint'),
+        export: document.querySelector('#save-button'),
+        fileName: document.querySelector('#file-name'),
+        jsonType: document.querySelector('#json'),
+        pngType: document.querySelector('#png'),
+        dbType: document.querySelector('#db')
+      },
+      load: {
+        button: document.querySelector('#load-blueprint'),
+        import: document.querySelector('#load-button'),
+        select: document.querySelector('#load-select-button'),
+        list: document.querySelector('#load-select-button'),
+        dropzone: document.querySelector('#drop_zone')
+      },
+      information: document.querySelector('#info-button'),
       background: wrapperModal.children[0]
     }
 
@@ -1738,28 +778,7 @@ class Application {
       options: document.querySelector('#options-button')
     }
 
-    // Each tools
-    nodeTools.forEach(btn => {
-      button.listen('click', btn, () => {
-        if (nodeList.children.length > 1) {
-          // Clear 'active' class from tools
-          nodeTools.forEach(nodeTool => nodeTool.classList.remove('active'))
-          // Add 'active' class current tool
-          btn.classList.add('active')
-
-          if (tools.get() !== btn.id) {
-            // Set new current tool
-            tools.set(btn.id)
-            
-            /* Tool Handler */
-            if (btn.id === 'move-tool') handlerMoveTool()
-            if (btn.id === 'line-tool') handlerLineTool()
-            if (btn.id === 'rect-tool') handlerRectTool()
-          }
-        }
-      })
-    })
-    
+    // Handlers
     const handlerNotDraggableStage = () => {
       stage.listen('mousedown', e => {
         const isLeft = e.evt.button === 0
@@ -1767,7 +786,6 @@ class Application {
       })
     }
 
-    /* Tool Handlers */
     const handlerMoveTool = () => {
       if (settings.find('debug'))
         console.log('[TOOL] Change tool on ' + tools.get())
@@ -1818,7 +836,7 @@ class Application {
 
               layers.get().children.push(rect)
 
-              stage.get.batchDraw()
+              layers.__find__('main').batchDraw()
             }
           }
         }
@@ -1840,6 +858,41 @@ class Application {
       })
     }
 
+    const handlerResize = () => {
+      layers.__find__('grid').destroyChildren()
+      layers.__find__('main').destroyChildren()
+      layers.__find__('draw').destroyChildren()
+
+      draw.grid(layers.__find__('grid'), ui.resize.input.value)
+
+      stage.get.batchDraw()
+      this.padding = ui.resize.input.value
+      if (nodeIndicator) nodeIndicator.innerText = 'Текущий масштаб: ' + this.padding
+      ui.resize.input.value = null
+    }
+
+    // Each tools
+    nodeTools.forEach(btn => {
+      button.listen('click', btn, () => {
+        if (nodeList.children.length > 1) {
+          // Clear 'active' class from tools
+          nodeTools.forEach(nodeTool => nodeTool.classList.remove('active'))
+          // Add 'active' class current tool
+          btn.classList.add('active')
+
+          if (tools.get() !== btn.id) {
+            // Set new current tool
+            tools.set(btn.id)
+            
+            /* Tool Handler */
+            if (btn.id === 'move-tool') handlerMoveTool()
+            if (btn.id === 'line-tool') handlerLineTool()
+            if (btn.id === 'rect-tool') handlerRectTool()
+          }
+        }
+      })
+    })
+
     // Button listeners
     button.listen('click', ui.layer.add, () => {
       history.increase()
@@ -1854,9 +907,203 @@ class Application {
       if (nodeList.children.length > 1) messageNotification.classList.add('hide')
     })
 
-    button.listen('click', ui.info, () => modal.open(wrapperInfo))
-    button.listen('click', ui.save, () => modal.open(wrapperSave))
-    button.listen('click', ui.load, () => modal.open(wrapperLoad))
+    button.listen('click', ui.save.button, () => modal.open(wrapperSave))
+    button.listen('click', ui.save.export, () => {
+      const downloadURI = (uri, name) => {
+        const link = document.createElement('a')
+        link.download = name
+        link.href = uri
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+      
+      const data = {
+        scale: this.padding,
+        layers: layers.all().map((layer, i) => {
+          return {
+            id: layer.id,
+            name: layer.name,
+            children: layer.children.map(child => {
+              return {
+                ...child.attrs
+              }
+            })
+          }
+        })
+      }
+
+      if (json.checked) {
+          const dataURL = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data, null, 2));
+          downloadURI(dataURL, ui.save.fileName.value ? `${ui.save.fileName.value}.json` : 'blueprint.json')
+          modal.close()
+      }
+
+      if (png.checked) {
+          const dataURL = stage.get.toDataURL({ pixelRatio: 3 })
+          downloadURI(dataURL, ui.save.fileName.value ? `${ui.save.fileName.value}.png` : 'blueprint.png')
+          modal.close()
+      }
+
+      if (db.checked) {
+        const adds = location.pathname.split('/')
+        //console.log(data)
+        fetch(`http://cr-dev.dock7.66bit.ru/admin/department/saveschema?id=${adds[adds.length - 1]}&schema=` + encodeURIComponent(JSON.stringify(data)), {
+            method: 'POST'
+        })
+        .then(response => response.json())
+        modal.close()
+      }
+    })
+
+    let result = ''
+    let factoryID = false
+
+    function handleFileSelect(evt) {
+      evt.stopPropagation()
+      evt.preventDefault()
+      const file = evt.dataTransfer.files[0]
+      const fileName = file.name
+      ui.load.dropzone.innerHTML = `<span>${fileName}</span>`
+      ui.load.dropzone.classList.add('dropped')
+
+      const reader = new FileReader();
+      reader.onload = (function (theFile) {
+        return function (e) {
+          result = e.target.result
+          factoryID = false
+        };
+      })(file);
+      reader.readAsDataURL(file);
+    }
+
+    function handleDragOver(evt) {
+      evt.stopPropagation()
+      evt.preventDefault()
+      evt.dataTransfer.dropEffect = 'copy'
+    }
+
+    ui.load.dropzone.addEventListener('dragover', handleDragOver, false)
+    ui.load.dropzone.addEventListener('drop', handleFileSelect, false)
+
+    ui.load.select.onclick = () => {
+      nodeList.classList.toggle('hide')
+    }
+
+    ui.load.list.childNodes.forEach(child => {
+      child.onclick = () => {
+        ui.load.list.classList.toggle('hide')
+        ui.load.select.children[0].textContent = child.children[0].textContent
+      }
+    })
+
+    button.listen('click', ui.load.button, () => modal.open(wrapperLoad))
+    button.listen('click', ui.load.import, () => {
+      modal.close()
+
+      const decode = (str) => {
+        if (typeof str === 'string') {
+            let res = str.replace('data:application/json;base64,', '')
+            res = escape(window.atob(res))
+            res = res ? JSON.parse(decodeURIComponent(res)) : false
+            return res
+        } else return false
+      }
+      result = decode(result)
+
+      if (result) {
+        history.refresh()
+        // Clear objects of all layers
+        layers.__find__('grid').destroyChildren()
+        layers.__find__('main').destroyChildren()
+        layers.__find__('draw').destroyChildren()
+
+        // Redrawing grid with new scale
+        this.padding = result.scale
+        nodeIndicator.innerText = 'Текущий масштаб: ' + this.padding
+        draw.grid(layers.__find__('grid'), this.padding)
+        ui.resize.input.value = null
+
+        layers.refresh()
+        // Fill layers instance object
+        result.layers.forEach(lr => {
+          history.increase()
+
+          let chds = []
+          lr.children.forEach(chd => {
+            const sp = new Konva.Rect({ ...chd })
+  
+            sp.on('mousedown', e => {
+              const isMiddle = e.evt.button === 1;
+              sp.draggable(!isMiddle);
+            })
+        
+            sp.on('dragstart dragmove dragend', e => {
+              sp.position({
+                x: Math.round(sp.x() / this.padding) * this.padding,
+                y: Math.round(sp.y() / this.padding) * this.padding
+              })
+              stage.get.batchDraw()
+            })
+
+            chds.push(sp)
+          })
+
+          layer.create(layer.name, chds)
+
+          if (nodeList.children.length > 1) messageNotification.classList.add('hide')
+        })
+
+        layer.clear()
+        layers.__find__('main').clear()
+        nodeList.children[1].classList.add('active')
+        
+        layers.set(result.layers[0].name)
+        layers.get().children.forEach(child => layers.__find__('main').add(child))
+
+        layers.__find__('main').draw()
+
+        stage.get.batchDraw()
+      }
+
+      setTimeout(() => {
+        result = ''
+        factoryID = false
+        ui.load.dropzone.innerHTML = 'Перетащите сюда JSON файл'
+        ui.load.dropzone.classList.remove('dropped')
+      }, 350)
+    })
+    
+    button.listen('click', ui.resize.button, () => {
+      if (ui.resize.input.value) {
+        if (ui.resize.input.value >= 25 && ui.resize.input.value <= 200) {
+          if (nodeList.childElementCount == 1) {
+            handlerResize()
+          } else {
+            setTimeout(() => {
+              modal.open(wrapperResize)
+            }, 200)
+          }
+        } else {
+          setTimeout(() => {
+            messageWarnning.classList.remove('hide')
+            ui.resize.input.value = null
+          }, 150)
+          setTimeout(() => messageWarnning.classList.add('hide'), 2500)
+        }
+      }
+    })
+
+    button.listen('click', ui.resize.apply, () => {
+      modal.close()
+      handlerResize()
+    })
+
+    button.listen('click', ui.resize.decline, () => {
+      modal.close()
+    })
+
+    button.listen('click', ui.information, () => modal.open(wrapperInfo))
     button.listen('click', ui.background, () => modal.close())
 
     button.listen('click', context.attach, () => {
