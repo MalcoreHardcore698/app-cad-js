@@ -1747,17 +1747,14 @@ class Application {
           // Add 'active' class current tool
           btn.classList.add('active')
 
-          // Set new current tool
-          tools.set(btn.id)
-          
-          /* Tool Handler */
-          switch (tools.get()) {
-              case 'move-tool':
-                return handlerMoveTool()
-              case 'line-tool':
-                return handlerLineTool()
-              case 'rect-tool':
-                return handlerRectTool()
+          if (tools.get() !== btn.id) {
+            // Set new current tool
+            tools.set(btn.id)
+            
+            /* Tool Handler */
+            if (btn.id === 'move-tool') handlerMoveTool()
+            if (btn.id === 'line-tool') handlerLineTool()
+            if (btn.id === 'rect-tool') handlerRectTool()
           }
         }
       })
